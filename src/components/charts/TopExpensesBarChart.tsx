@@ -51,14 +51,13 @@ export const TopExpensesBarChart: React.FC<Props> = ({ top5 }) => {
                       #{index + 1}
                     </span>
                     <span className="font-medium text-stone-800 truncate">{item.label}</span>
+                    <span className="text-stone-300">·</span>
                     <span
-                      className={`text-[10px] uppercase font-semibold px-1.5 py-0.5 rounded tracking-wide ${
-                        item.tag === 'need'
-                          ? 'bg-emerald-50 text-emerald-800 border border-emerald-200/60'
-                          : 'bg-amber-50 text-amber-800 border border-amber-200/60'
+                      className={`text-[11px] font-sans font-medium ${
+                        item.tag === 'need' ? 'text-emerald-800' : 'text-amber-800'
                       }`}
                     >
-                      {item.tag}
+                      {item.tag === 'need' ? 'Need' : 'Want'}
                     </span>
                   </div>
                   <div className="flex items-center gap-2 font-mono-num shrink-0">
@@ -72,7 +71,7 @@ export const TopExpensesBarChart: React.FC<Props> = ({ top5 }) => {
                   <div
                     style={{ width: `${Math.max(4, widthPct)}%` }}
                     className={`h-full rounded-full transition-all duration-300 ${
-                      item.tag === 'need' ? 'bg-stone-700' : 'bg-amber-500'
+                      item.tag === 'need' ? 'bg-stone-700' : 'bg-amber-600'
                     }`}
                   />
                 </div>
@@ -86,7 +85,7 @@ export const TopExpensesBarChart: React.FC<Props> = ({ top5 }) => {
             <thead>
               <tr className="border-b border-stone-200 text-stone-500 font-medium">
                 <th className="py-2">Rank & Item</th>
-                <th className="py-2">Tag</th>
+                <th className="py-2">Classification</th>
                 <th className="py-2 text-right">Monthly Spend</th>
                 <th className="py-2 text-right">Total Outflow Share</th>
               </tr>
@@ -99,11 +98,11 @@ export const TopExpensesBarChart: React.FC<Props> = ({ top5 }) => {
                   </td>
                   <td className="py-2 font-sans">
                     <span
-                      className={`text-[10px] uppercase font-semibold px-1.5 py-0.5 rounded ${
-                        item.tag === 'need' ? 'bg-emerald-50 text-emerald-800' : 'bg-amber-50 text-amber-800'
+                      className={`text-[11px] font-medium ${
+                        item.tag === 'need' ? 'text-emerald-800' : 'text-amber-800'
                       }`}
                     >
-                      {item.tag}
+                      {item.tag === 'need' ? 'Need' : 'Want'}
                     </span>
                   </td>
                   <td className="py-2 text-right text-stone-900">${item.monthlyAmount.toLocaleString()}</td>

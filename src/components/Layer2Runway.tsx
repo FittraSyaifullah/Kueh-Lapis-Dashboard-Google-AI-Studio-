@@ -120,14 +120,40 @@ export const Layer2Runway: React.FC<Props> = ({
       </div>
 
       {/* Runway Assessment Observation (SW-45) */}
-      <div className="p-5 rounded-2xl bg-white border border-stone-200/80 shadow-xs text-xs text-stone-700 leading-relaxed">
-        <div className="flex items-center gap-2 font-medium text-stone-900 mb-1">
-          <ShieldCheck className="w-4 h-4 text-stone-500" />
-          <span className="font-serif italic text-sm">Runway Health Assessment</span>
+      <div className="p-5 sm:p-6 rounded-2xl bg-white border border-stone-200/80 shadow-xs text-xs text-stone-700 leading-relaxed space-y-3">
+        <div className="flex items-center gap-2 font-medium text-stone-900">
+          <ShieldCheck className="w-4 h-4 text-emerald-800" />
+          <span className="font-serif italic text-sm">Emergency Runway Diagnostics</span>
         </div>
         <p className="font-light">{results.cashRunwayBand.explanation}</p>
+
+        {/* Crisis Stress-Test: Needs Only */}
+        {results.monthlyNeeds > 0 && results.monthlyWants > 0 && (
+          <div className="pt-2 border-t border-stone-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-stone-800">
+            <div>
+              <strong className="font-medium text-stone-950">Crisis Stress-Test (Pausing All Discretionary Wants):</strong>
+              <p className="font-light text-stone-600 mt-0.5">
+                If you pause all non-essential "Wants" ($
+                {Math.round(results.monthlyWants).toLocaleString()}
+                /mo), your liquid cash runway extends from{' '}
+                <span className="font-mono-num font-semibold">
+                  {results.cashRunwayMonths.toFixed(1)} months
+                </span>{' '}
+                to{' '}
+                <span className="font-mono-num font-semibold text-emerald-800">
+                  {((plan.savings.cash || 0) / results.monthlyNeeds).toFixed(1)} months
+                </span>
+                .
+              </p>
+            </div>
+            <div className="shrink-0 font-mono-num text-xs bg-emerald-50 text-emerald-900 px-3 py-1.5 rounded-xl border border-emerald-200/60 font-medium">
+              +{Math.max(0, (plan.savings.cash || 0) / results.monthlyNeeds - results.cashRunwayMonths).toFixed(1)} mo extra cushion
+            </div>
+          </div>
+        )}
+
         {results.cashRunwayMonths < 3 && (
-          <p className="mt-2 font-medium text-stone-900">
+          <p className="pt-2 border-t border-stone-100 font-medium text-amber-900">
             Suggested Action: Channel your current monthly cash surplus directly into a high-interest liquid savings account until you hold at least 3 months of essential living expenses ($
             {Math.round(results.monthlyExpenses * 3).toLocaleString()}).
           </p>

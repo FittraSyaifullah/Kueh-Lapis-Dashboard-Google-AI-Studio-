@@ -326,18 +326,74 @@ export const Layer3CPF: React.FC<Props> = ({
               </div>
             </div>
 
-            {/* Projected CPF */}
-            <div className="mt-6 p-5 rounded-2xl bg-stone-50/70 border border-stone-200/80 flex flex-col sm:flex-row items-baseline justify-between gap-4">
-              <div>
-                <span className="text-xs font-semibold text-stone-900 block">
-                  Projected Combined CPF at Retirement (Age {plan.profile.retirementAge || 60})
-                </span>
-                <span className="text-xs text-stone-500 font-light">
-                  Compounded at 2.5% (OA) and 4.0% (SA/MA) after deducting monthly mortgage
-                </span>
+            {/* Projected CPF & Retirement Sum Benchmarks */}
+            <div className="mt-6 p-5 rounded-2xl bg-stone-50/70 border border-stone-200/80 space-y-4">
+              <div className="flex flex-col sm:flex-row items-baseline justify-between gap-2">
+                <div>
+                  <span className="text-xs font-semibold text-stone-900 block">
+                    Projected Combined CPF at Retirement (Age {plan.profile.retirementAge || 60})
+                  </span>
+                  <span className="text-xs text-stone-500 font-light">
+                    Compounded at 2.5% (OA) and 4.0% (SA/MA) after deducting monthly mortgage
+                  </span>
+                </div>
+                <div className="text-2xl font-normal text-stone-950 font-mono-num">
+                  ${cpfCalcs.projectedCpfAtRetirement.toLocaleString()}
+                </div>
               </div>
-              <div className="text-2xl font-normal text-stone-950 font-mono-num">
-                ${cpfCalcs.projectedCpfAtRetirement.toLocaleString()}
+
+              {/* 2026 CPF Retirement Sum Benchmarks */}
+              <div className="pt-3 border-t border-stone-200/80">
+                <div className="flex items-center justify-between text-[11px] text-stone-500 mb-2">
+                  <span className="font-medium text-stone-700">2026 CPF LIFE Target Milestones:</span>
+                  <span className="font-mono-num">
+                    {cpfCalcs.projectedCpfAtRetirement >= 426000
+                      ? 'Enhanced Retirement Sum (ERS) Met'
+                      : cpfCalcs.projectedCpfAtRetirement >= 213000
+                      ? 'Full Retirement Sum (FRS) Met'
+                      : cpfCalcs.projectedCpfAtRetirement >= 106500
+                      ? 'Basic Retirement Sum (BRS) Met'
+                      : 'Below Basic Retirement Sum'}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-3 gap-2 text-center text-xs">
+                  <div
+                    className={`p-2.5 rounded-xl border transition-colors ${
+                      cpfCalcs.projectedCpfAtRetirement >= 106500
+                        ? 'bg-emerald-50/70 border-emerald-300/80 text-emerald-950 font-medium'
+                        : 'bg-white border-stone-200 text-stone-600'
+                    }`}
+                  >
+                    <span className="text-[10px] block text-stone-500">BRS (Basic)</span>
+                    <span className="font-mono-num font-semibold block text-xs mt-0.5">$106,500</span>
+                    <span className="text-[10px] text-stone-400 font-light mt-0.5 block">~$850/mo payout</span>
+                  </div>
+
+                  <div
+                    className={`p-2.5 rounded-xl border transition-colors ${
+                      cpfCalcs.projectedCpfAtRetirement >= 213000
+                        ? 'bg-emerald-50/70 border-emerald-300/80 text-emerald-950 font-medium'
+                        : 'bg-white border-stone-200 text-stone-600'
+                    }`}
+                  >
+                    <span className="text-[10px] block text-stone-500">FRS (Full)</span>
+                    <span className="font-mono-num font-semibold block text-xs mt-0.5">$213,000</span>
+                    <span className="text-[10px] text-stone-400 font-light mt-0.5 block">~$1,650/mo payout</span>
+                  </div>
+
+                  <div
+                    className={`p-2.5 rounded-xl border transition-colors ${
+                      cpfCalcs.projectedCpfAtRetirement >= 426000
+                        ? 'bg-emerald-50/70 border-emerald-300/80 text-emerald-950 font-medium'
+                        : 'bg-white border-stone-200 text-stone-600'
+                    }`}
+                  >
+                    <span className="text-[10px] block text-stone-500">ERS (Enhanced)</span>
+                    <span className="font-mono-num font-semibold block text-xs mt-0.5">$426,000</span>
+                    <span className="text-[10px] text-stone-400 font-light mt-0.5 block">~$3,300/mo payout</span>
+                  </div>
+                </div>
               </div>
             </div>
           </section>

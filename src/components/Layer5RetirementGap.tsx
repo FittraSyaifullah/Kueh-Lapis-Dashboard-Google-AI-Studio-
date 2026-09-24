@@ -284,8 +284,8 @@ export const Layer5RetirementGap: React.FC<Props> = ({
                     <td className="py-3 px-3 flex items-center gap-1.5">
                       <span>Age {row.retirementAge}</span>
                       {isCurrent && (
-                        <span className="text-[10px] font-sans text-amber-900 bg-amber-100 px-1.5 py-0.5 rounded font-medium">
-                          Current Target
+                        <span className="text-[11px] font-sans text-amber-900 font-medium">
+                          · Target
                         </span>
                       )}
                     </td>

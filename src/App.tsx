@@ -14,7 +14,8 @@ import { ReturnCodeModal } from './components/ReturnCodeModal.tsx';
 import { ConsentModal } from './components/ConsentModal.tsx';
 import { GlossaryModal } from './components/GlossaryModal.tsx';
 import { PrintReport } from './components/PrintReport.tsx';
-import { ShieldCheck, Sparkles, Layers } from 'lucide-react';
+import { ProfileModal } from './components/ProfileModal.tsx';
+import { ShieldCheck, Sparkles, Layers, User } from 'lucide-react';
 
 export default function App() {
   // Read initial query params if present
@@ -48,6 +49,7 @@ export default function App() {
   const [isConsentOpen, setIsConsentOpen] = useState(false);
   const [isGlossaryOpen, setIsGlossaryOpen] = useState(false);
   const [isReportOpen, setIsReportOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   // Active Financial Plan
   const [plan, setPlan] = useState<Plan>(() => {
@@ -152,30 +154,71 @@ export default function App() {
               <p className="text-base sm:text-lg text-stone-600 font-light mt-3 leading-relaxed">
                 Build your personal financial blueprint step by step. Answer three foundational questions: Where does my money go? What is left each month? And is it enough for the life I want?
               </p>
+
+              {/* Participant Profile Banner */}
+              <div className="flex items-center gap-3 mt-4 text-xs text-stone-600">
+                <span className="flex items-center gap-1.5 font-medium text-stone-900">
+                  <User className="w-3.5 h-3.5 text-stone-400" />
+                  {plan.profile.name || 'Anonymous Attendee'}
+                </span>
+                <span className="text-stone-300">·</span>
+                <span>
+                  Age {plan.profile.age || 44} → Target Retire {plan.profile.retirementAge || 60}
+                </span>
+                <span className="text-stone-300">·</span>
+                <button
+                  type="button"
+                  onClick={() => setIsProfileOpen(true)}
+                  className="text-amber-800 hover:text-amber-950 font-medium underline underline-offset-2 transition-colors cursor-pointer"
+                >
+                  Edit Timeline
+                </button>
+              </div>
             </div>
 
-            {/* Quick Balance Summary Strip (Unboxed Typography) */}
+            {/* Quick Balance Summary Strip (Clickable & Unboxed Typography) */}
             <div className="flex flex-wrap sm:flex-nowrap items-center gap-6 text-xs text-stone-600 shrink-0 font-mono-num pt-2 md:pt-0">
-              <div className="border-l border-stone-200 pl-3">
-                <span className="text-[11px] font-sans text-stone-400 block font-light">Monthly Net Flow</span>
-                <span className={`text-base font-medium ${results.monthlyCashFlow >= 0 ? 'text-emerald-800' : 'text-rose-800'}`}>
+              <button
+                type="button"
+                onClick={() => setActiveLayer(1)}
+                className="border-l border-stone-200 hover:border-emerald-600 pl-3 text-left transition-all group cursor-pointer"
+                title="Click to view Chapter 01: Cash Flow Bedrock"
+              >
+                <span className="text-[11px] font-sans text-stone-400 group-hover:text-emerald-700 block font-light transition-colors">
+                  Monthly Net Flow
+                </span>
+                <span className={`text-base font-medium transition-transform group-hover:scale-105 inline-block ${results.monthlyCashFlow >= 0 ? 'text-emerald-800' : 'text-rose-800'}`}>
                   {results.monthlyCashFlow >= 0 ? '+' : '-'}${Math.round(Math.abs(results.monthlyCashFlow)).toLocaleString()}
                 </span>
-              </div>
+              </button>
 
-              <div className="border-l border-stone-200 pl-3">
-                <span className="text-[11px] font-sans text-stone-400 block font-light">Emergency Runway</span>
-                <span className="text-base font-medium text-stone-900">
+              <button
+                type="button"
+                onClick={() => setActiveLayer(2)}
+                className="border-l border-stone-200 hover:border-stone-500 pl-3 text-left transition-all group cursor-pointer"
+                title="Click to inspect Chapter 02: Emergency Runway"
+              >
+                <span className="text-[11px] font-sans text-stone-400 group-hover:text-stone-700 block font-light transition-colors">
+                  Emergency Runway
+                </span>
+                <span className="text-base font-medium text-stone-900 group-hover:scale-105 inline-block transition-transform">
                   {results.cashRunwayMonths.toFixed(1)} mo
                 </span>
-              </div>
+              </button>
 
-              <div className="border-l border-stone-200 pl-3">
-                <span className="text-[11px] font-sans text-stone-400 block font-light">Retirement Target</span>
-                <span className="text-base font-medium text-stone-900">
+              <button
+                type="button"
+                onClick={() => setActiveLayer(5)}
+                className="border-l border-stone-200 hover:border-amber-600 pl-3 text-left transition-all group cursor-pointer"
+                title="Click to review Chapter 05: Retirement Gap"
+              >
+                <span className="text-[11px] font-sans text-stone-400 group-hover:text-amber-700 block font-light transition-colors">
+                  Retirement Target
+                </span>
+                <span className="text-base font-medium text-stone-900 group-hover:scale-105 inline-block transition-transform">
                   {results.lumpSumNeeded > 0 ? `$${Math.round(results.lumpSumNeeded / 1000).toLocaleString()}k` : '—'}
                 </span>
-              </div>
+              </button>
             </div>
           </div>
         </header>
@@ -376,6 +419,14 @@ export default function App() {
         plan={plan}
         results={results}
         unlockedLevel={unlockedLevel}
+      />
+
+      <ProfileModal
+        isOpen={isProfileOpen}
+        onClose={() => setIsProfileOpen(false)}
+        profile={plan.profile}
+        sessionCode={plan.sessionCode}
+        onUpdateProfile={(profile) => handleUpdatePlan({ profile })}
       />
     </div>
   );

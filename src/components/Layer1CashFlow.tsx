@@ -5,6 +5,7 @@ import { CashFlowBarChart } from './charts/CashFlowBarChart.tsx';
 import { SpendingDonutChart } from './charts/SpendingDonutChart.tsx';
 import { NeedVsWantChart } from './charts/NeedVsWantChart.tsx';
 import { TopExpensesBarChart } from './charts/TopExpensesBarChart.tsx';
+import { CashFlowSankeyChart } from './charts/CashFlowSankeyChart.tsx';
 
 interface Props {
   plan: Plan;
@@ -470,6 +471,15 @@ export const Layer1CashFlow: React.FC<Props> = ({
           </div>
         </form>
       </section>
+
+      {/* Cash Flow Stream Visualisation */}
+      <CashFlowSankeyChart
+        income={plan.income.takeHomePay || 0}
+        otherIncome={plan.income.otherIncome || 0}
+        needs={results.monthlyNeeds}
+        wants={results.monthlyWants}
+        cashFlow={results.monthlyCashFlow}
+      />
 
       {/* Visualisation Charts for Level 1 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

@@ -258,6 +258,61 @@ export const Layer4Lifestyle: React.FC<Props> = ({
             </span>
           </div>
         </div>
+
+        {/* Singapore Everyday Inflation Reality Check */}
+        <div className="mt-6 pt-5 border-t border-[#ebd7b2]/60">
+          <div className="text-xs font-semibold text-stone-900 mb-2 flex items-center justify-between">
+            <span>Everyday Singapore Inflation Reality Check ({yearsToRetirement} years to age {retAge}):</span>
+            <span className="font-mono-num text-[11px] text-stone-500 font-normal">
+              Purchasing power multiplier: {(Math.pow(1 + (plan.lifestyle?.inflationPre ?? 0.03), yearsToRetirement)).toFixed(2)}×
+            </span>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+            <div className="p-3 bg-white rounded-xl border border-[#dac8a0]">
+              <span className="text-[11px] text-stone-500 block truncate">Kopitiam Kopi / Teh</span>
+              <div className="flex items-baseline justify-between mt-1">
+                <span className="text-stone-400 font-mono-num">$1.80</span>
+                <span className="text-stone-300">→</span>
+                <span className="font-bold text-stone-900 font-mono-num">
+                  ${(1.8 * Math.pow(1 + (plan.lifestyle?.inflationPre ?? 0.03), yearsToRetirement)).toFixed(2)}
+                </span>
+              </div>
+            </div>
+
+            <div className="p-3 bg-white rounded-xl border border-[#dac8a0]">
+              <span className="text-[11px] text-stone-500 block truncate">Hawker Chicken Rice</span>
+              <div className="flex items-baseline justify-between mt-1">
+                <span className="text-stone-400 font-mono-num">$6.00</span>
+                <span className="text-stone-300">→</span>
+                <span className="font-bold text-stone-900 font-mono-num">
+                  ${(6.0 * Math.pow(1 + (plan.lifestyle?.inflationPre ?? 0.03), yearsToRetirement)).toFixed(2)}
+                </span>
+              </div>
+            </div>
+
+            <div className="p-3 bg-white rounded-xl border border-[#dac8a0]">
+              <span className="text-[11px] text-stone-500 block truncate">Monthly SP Utilities</span>
+              <div className="flex items-baseline justify-between mt-1">
+                <span className="text-stone-400 font-mono-num">$180</span>
+                <span className="text-stone-300">→</span>
+                <span className="font-bold text-stone-900 font-mono-num">
+                  ${Math.round(180 * Math.pow(1 + (plan.lifestyle?.inflationPre ?? 0.03), yearsToRetirement)).toLocaleString()}
+                </span>
+              </div>
+            </div>
+
+            <div className="p-3 bg-white rounded-xl border border-[#dac8a0]">
+              <span className="text-[11px] text-stone-500 block truncate">Weekend Family Dining</span>
+              <div className="flex items-baseline justify-between mt-1">
+                <span className="text-stone-400 font-mono-num">$120</span>
+                <span className="text-stone-300">→</span>
+                <span className="font-bold text-stone-900 font-mono-num">
+                  ${Math.round(120 * Math.pow(1 + (plan.lifestyle?.inflationPre ?? 0.03), yearsToRetirement)).toLocaleString()}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* Desired Lifestyle Items Ledger */}
