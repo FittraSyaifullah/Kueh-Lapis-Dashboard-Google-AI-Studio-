@@ -1,0 +1,119 @@
+{
+  "version": "1.0",
+  "app": {
+    "title": "Kueh Lapis Financial Dashboard",
+    "tagline": "Build your financial clarity layer by layer",
+    "partner_credit": "Overhaul SG × AAG Financial Workshops",
+    "compliance_disclaimer": "For learning and educational purposes only. Not financial advice, product promotion, or financial recommendation under the Financial Advisers Act (FAA)."
+  },
+  "layers": [
+    {
+      "level": 1,
+      "id": "cash_flow",
+      "title": "Layer 1: Cash Flow & Habits",
+      "short_name": "Cash Flow",
+      "color_theme": "emerald",
+      "subtitle": "Where does my money go, and what is left each month?",
+      "why_we_ask": "Cash flow is the bedrock layer of any financial house. Without knowing what stays in your pocket each month, long-term saving or investing is built on guesswork."
+    },
+    {
+      "level": 1,
+      "id": "savings_runway",
+      "title": "Layer 1: Emergency Runway",
+      "short_name": "Runway",
+      "color_theme": "amber",
+      "subtitle": "How many months can I survive if income stops tomorrow?",
+      "why_we_ask": "An emergency runway prevents you from selling investments at a loss or falling into high-interest debt when unexpected events strike."
+    },
+    {
+      "level": 2,
+      "id": "cpf_foundation",
+      "title": "Layer 2: CPF & Net Worth",
+      "short_name": "CPF Foundation",
+      "color_theme": "amber",
+      "subtitle": "What is working for me in Singapore's national social security system?",
+      "why_we_ask": "CPF forms a massive portion of Singaporeans' financial foundation. Understanding your OA, SA, and MA allocations lets you plan housing and retirement realistically."
+    },
+    {
+      "level": 3,
+      "id": "retirement_lifestyle",
+      "title": "Layer 3: Desired Lifestyle",
+      "short_name": "Future Lifestyle",
+      "color_theme": "rose",
+      "subtitle": "What will life cost in the future, factoring in Singapore inflation?",
+      "why_we_ask": "Inflation silently doubles living costs every 20-25 years. Today's $3,000 monthly spending will require significantly more in your 60s and 70s."
+    },
+    {
+      "level": 4,
+      "id": "retirement_gap",
+      "title": "Layer 4: Retirement Gap & Projection",
+      "short_name": "Retirement Gap",
+      "color_theme": "teal",
+      "subtitle": "How much lump sum do I need, and is my projected fund on track?",
+      "why_we_ask": "Calculating your funded percentage reveals exactly whether to boost savings, extend working years, or adjust asset allocation to retire on your terms."
+    }
+  ],
+  "glossary": {
+    "cash_flow": {
+      "term": "Cash Flow",
+      "definition": "Your take-home income minus all monthly living expenses. A positive cash flow means money is left over to build savings; a negative cash flow means you are drawing down savings or taking on debt."
+    },
+    "savings_rate": {
+      "term": "Savings Rate",
+      "definition": "The percentage of your monthly take-home pay that is saved or invested (Surplus ÷ Net Take-Home Pay). A rate of 20% or higher is considered a solid, sustainable benchmark."
+    },
+    "emergency_runway": {
+      "term": "Emergency Runway",
+      "definition": "The number of months you could pay all your essential living expenses using only your liquid savings if your income stopped today (Liquid Cash ÷ Monthly Expenses)."
+    },
+    "needs_vs_wants": {
+      "term": "Needs vs Wants",
+      "definition": "Needs are non-negotiable living essentials (shelter, basic food, transport, baseline health insurance). Wants are lifestyle choices (dining out, streaming, holidays, luxury items) that can be paused during hard times."
+    },
+    "cpf": {
+      "term": "Central Provident Fund (CPF)",
+      "definition": "Singapore's mandatory social security savings scheme funded by employers and employees to support retirement, housing, and healthcare."
+    },
+    "cpf_oa": {
+      "term": "Ordinary Account (OA)",
+      "definition": "Used for housing mortgages, approved insurance, and tertiary education. Currently earns a guaranteed 2.5% per annum interest rate."
+    },
+    "cpf_sa": {
+      "term": "Special Account (SA)",
+      "definition": "Dedicated to long-term retirement savings. Currently earns a minimum guaranteed 4.0% per annum interest rate."
+    },
+    "cpf_ma": {
+      "term": "MediSave Account (MA)",
+      "definition": "Reserved for hospitalisation expenses, approved outpatient medical treatments, and MediShield Life/CareShield Life premiums. Currently earns 4.0% interest."
+    },
+    "cpf_ra": {
+      "term": "Retirement Account (RA)",
+      "definition": "Created at age 55 from your OA and SA savings up to the Full Retirement Sum (FRS). Powers monthly payouts under CPF LIFE from age 65 onwards."
+    },
+    "cpf_life": {
+      "term": "CPF LIFE",
+      "definition": "Singapore's national longevity annuity scheme that provides guaranteed monthly payouts for as long as you live, starting between age 65 and 70."
+    },
+    "endowment": {
+      "term": "Endowment Policy",
+      "definition": "An insurance savings plan that provides a lump sum upon policy maturity or death. Returns typically comprise a guaranteed portion and a non-guaranteed bonus."
+    },
+    "inflation": {
+      "term": "Inflation",
+      "definition": "The steady increase in prices over time, eroding the purchasing power of each dollar. At a modest 3% inflation rate, $100 today buys only $55 worth of goods in 20 years."
+    },
+    "lump_sum_needed": {
+      "term": "Retirement Lump Sum Needed",
+      "definition": "The total capital required on your retirement date to fund all expected living expenses until your planning age, accounting for post-retirement inflation and investment returns."
+    },
+    "funded_percentage": {
+      "term": "Funded Percentage",
+      "definition": "Projected Fund ÷ Lump Sum Needed. A score of 100% means your anticipated savings and CPF will fully support your desired retirement lifestyle."
+    }
+  },
+  "guidance": {
+    "positive_cash_flow": "Great news! Your monthly income exceeds your spending. This monthly surplus is the engine that will power your emergency runway and investment compounding.",
+    "neutral_cash_flow": "You are breaking even right now. While you are not accumulating debt, you have no safety margin if an unexpected expense arises. Try reviewing one 'Want' category.",
+    "negative_cash_flow": "Your monthly expenses currently exceed take-home pay. Don't worry—most people can fix this in one sitting by converting 1 or 2 high-cost Wants into conscious savings."
+  }
+}

@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: #1c1917;
+    background-color: #faf9f5; /* Warm, peaceful editorial paper tone */
+    letter-spacing: -0.011em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background-color: #fef08a;
+    color: #451a03;
+  }
+}
+
+.font-display,
+.font-editorial {
+  font-family: 'Newsreader', 'Fraunces', Georgia, Cambria, serif;
+  font-feature-settings: "kern", "liga", "clig", "calt";
+}
+
+.font-mono-num {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* Editorial rule hairline */
+.border-editorial {
+  border-color: rgba(28, 25, 23, 0.08);
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background-color: #ffffff !important;
+  }
+}

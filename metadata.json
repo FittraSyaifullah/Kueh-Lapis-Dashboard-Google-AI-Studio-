@@ -1,0 +1,6 @@
+{
+  "name": "Kueh Lapis Financial Dashboard",
+  "description": "Layered personal financial planning dashboard for workshops by Overhaul SG and AAG. Track cash flow, savings runway, CPF, and retirement milestones without sign-up.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

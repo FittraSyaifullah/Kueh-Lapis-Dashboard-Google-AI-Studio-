@@ -1,0 +1,51 @@
+{
+  "version": "2026.1",
+  "planning_age_default": 85,
+  "retirement_age_default": 60,
+  "current_age_default": 35,
+  "inflation": {
+    "pre_retirement": 0.03,
+    "post_retirement": 0.03,
+    "min": 0.00,
+    "max": 0.08
+  },
+  "asset_classes": {
+    "cash": {
+      "label": "Cash & Fixed Deposits",
+      "default_rate": 0.02,
+      "description": "High liquidity bank accounts and short-term deposits"
+    },
+    "endowment": {
+      "label": "Endowment Policies",
+      "default_rate": 0.03,
+      "description": "Participating insurance and guaranteed endowments"
+    },
+    "bonds": {
+      "label": "Bonds / Singapore Savings Bonds (SSB)",
+      "default_rate": 0.04,
+      "description": "Government and high-grade corporate debt instruments"
+    },
+    "balanced": {
+      "label": "Balanced Portfolio (60/40)",
+      "default_rate": 0.06,
+      "description": "Diversified growth and fixed income combination"
+    },
+    "equities": {
+      "label": "Equities & Global ETFs",
+      "default_rate": 0.08,
+      "description": "Broad-market index funds and shares"
+    },
+    "other": {
+      "label": "Other Investments",
+      "default_rate": 0.04,
+      "description": "Precious metals, real estate or private assets"
+    }
+  },
+  "cpf_interest": {
+    "oa": 0.025,
+    "sa": 0.040,
+    "ma": 0.040,
+    "ra": 0.040
+  },
+  "disclaimer": "All return rates and inflation rates are illustrative assumptions, not promises or guaranteed yields."
+}

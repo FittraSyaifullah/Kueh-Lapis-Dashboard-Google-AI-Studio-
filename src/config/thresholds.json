@@ -1,0 +1,97 @@
+{
+  "version": "1.0",
+  "savings_rate_bands": [
+    {
+      "min": 0.50,
+      "status": "Aggressive Saver",
+      "color": "emerald",
+      "explanation": "Outstanding discipline! You are saving more than half your take-home income."
+    },
+    {
+      "min": 0.20,
+      "status": "Healthy & Sustainable",
+      "color": "teal",
+      "explanation": "Solid baseline. Financial guidelines typically recommend saving at least 20% of net pay."
+    },
+    {
+      "min": 0.10,
+      "status": "Moderate",
+      "color": "amber",
+      "explanation": "You have a positive cushion, but aim to gradually step this up towards 20%."
+    },
+    {
+      "min": 0.00,
+      "status": "Tight Margin",
+      "color": "orange",
+      "explanation": "Your cash flow is positive but vulnerable to unexpected shocks or small emergencies."
+    },
+    {
+      "min": -999,
+      "status": "Deficit (Spending > Income)",
+      "color": "rose",
+      "explanation": "Spending exceeds income each month. We'll identify Want expenses to trim first."
+    }
+  ],
+  "runway_months_bands": [
+    {
+      "min": 12,
+      "status": "Fortress Runway (12+ months)",
+      "color": "emerald",
+      "explanation": "Exceptional peace of mind. You could weather a year without salary interruption."
+    },
+    {
+      "min": 6,
+      "status": "Solid Emergency Fund (6–12 months)",
+      "color": "teal",
+      "explanation": "Recommended gold standard for working professionals with fixed commitments."
+    },
+    {
+      "min": 3,
+      "status": "Basic Cushion (3–6 months)",
+      "color": "amber",
+      "explanation": "Good start covering immediate shocks. Keep building towards the 6-month milestone."
+    },
+    {
+      "min": 1,
+      "status": "Fragile Runway (1–3 months)",
+      "color": "orange",
+      "explanation": "Under 3 months of runway. Any job transition or unexpected bill may force borrowing."
+    },
+    {
+      "min": 0,
+      "status": "Critical (Under 1 month)",
+      "color": "rose",
+      "explanation": "Less than a month of buffer. Building an initial $1,000 to 1-month safety reserve is priority #1."
+    }
+  ],
+  "need_want_warning": {
+    "want_percent_threshold": 0.35,
+    "warning_text": "Wants account for more than 35% of total spending. Trimming just 1 or 2 wants can instantly flip cash flow into a positive cushion."
+  },
+  "funded_bands": [
+    {
+      "min": 1.0,
+      "status": "Fully Funded (100%+)",
+      "color": "emerald",
+      "explanation": "On track to reach your desired retirement lifestyle with your current savings and growth trajectory."
+    },
+    {
+      "min": 0.85,
+      "status": "Very Close (85%–99%)",
+      "color": "teal",
+      "explanation": "A slight bump in monthly savings or a 1-year adjustment closes this modest gap completely."
+    },
+    {
+      "min": 0.60,
+      "status": "Moderate Gap (60%–84%)",
+      "color": "amber",
+      "explanation": "Viable with focused action: review retirement age, asset allocation, and monthly savings."
+    },
+    {
+      "min": 0,
+      "status": "Significant Shortfall (<60%)",
+      "color": "rose",
+      "explanation": "Clear signal to reassess: optimize discretionary spending, boost career earnings, or phase retirement."
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "version": "1.0",
+  "sessions": [
+    {
+      "code": "TOA-PAYOH-L1",
+      "name": "AAG Toa Payoh Pilot (Level 1)",
+      "unlocked_level": 1,
+      "sample_data": false,
+      "need_want_tagging": true,
+      "monthly_yearly_toggle": true,
+      "locked_layers_visible": true,
+      "notes": "First workshop live cohort session"
+    },
+    {
+      "code": "DEMO-SAMPLE",
+      "name": "Live Workshop Demo (With Preloaded Data)",
+      "unlocked_level": 1,
+      "sample_data": true,
+      "need_want_tagging": true,
+      "monthly_yearly_toggle": true,
+      "locked_layers_visible": true,
+      "notes": "Demonstration link with verified $4,200 worked example"
+    },
+    {
+      "code": "WORKSHOP-L2",
+      "name": "Workshop Level 2 (CPF Foundation)",
+      "unlocked_level": 2,
+      "sample_data": true,
+      "need_want_tagging": true,
+      "monthly_yearly_toggle": true,
+      "locked_layers_visible": true,
+      "notes": "Includes 2026 CPF contributions & allocation"
+    },
+    {
+      "code": "FULL-PLANNER",
+      "name": "Master Planner (Levels 1 to 5 Unlocked)",
+      "unlocked_level": 5,
+      "sample_data": true,
+      "need_want_tagging": true,
+      "monthly_yearly_toggle": true,
+      "locked_layers_visible": true,
+      "notes": "Full Kueh Lapis roadmap unlocked"
+    }
+  ]
+}

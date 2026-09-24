@@ -1,0 +1,162 @@
+{
+  "effective_year": 2026,
+  "wage_ceiling_monthly": 8000,
+  "annual_wage_ceiling": 102000,
+  "interest_rates": {
+    "oa": 0.025,
+    "sa": 0.040,
+    "ma": 0.040,
+    "ra": 0.040
+  },
+  "age_bands": [
+    {
+      "min_age": 0,
+      "max_age": 35,
+      "label": "35 and below",
+      "employee_rate": 0.20,
+      "employer_rate": 0.17,
+      "total_rate": 0.37,
+      "allocation_wage_ratio": {
+        "oa": 0.23,
+        "sa": 0.06,
+        "ma": 0.08
+      },
+      "allocation_shares": {
+        "oa": 0.6217,
+        "sa": 0.1621,
+        "ma": 0.2162
+      }
+    },
+    {
+      "min_age": 36,
+      "max_age": 45,
+      "label": "Above 35 to 45",
+      "employee_rate": 0.20,
+      "employer_rate": 0.17,
+      "total_rate": 0.37,
+      "allocation_wage_ratio": {
+        "oa": 0.21,
+        "sa": 0.07,
+        "ma": 0.09
+      },
+      "allocation_shares": {
+        "oa": 0.5676,
+        "sa": 0.1892,
+        "ma": 0.2432
+      }
+    },
+    {
+      "min_age": 46,
+      "max_age": 50,
+      "label": "Above 45 to 50",
+      "employee_rate": 0.20,
+      "employer_rate": 0.17,
+      "total_rate": 0.37,
+      "allocation_wage_ratio": {
+        "oa": 0.19,
+        "sa": 0.08,
+        "ma": 0.10
+      },
+      "allocation_shares": {
+        "oa": 0.5135,
+        "sa": 0.2162,
+        "ma": 0.2703
+      }
+    },
+    {
+      "min_age": 51,
+      "max_age": 55,
+      "label": "Above 50 to 55",
+      "employee_rate": 0.17,
+      "employer_rate": 0.15,
+      "total_rate": 0.32,
+      "allocation_wage_ratio": {
+        "oa": 0.15,
+        "sa": 0.07,
+        "ma": 0.10
+      },
+      "allocation_shares": {
+        "oa": 0.4687,
+        "sa": 0.2188,
+        "ma": 0.3125
+      }
+    },
+    {
+      "min_age": 56,
+      "max_age": 60,
+      "label": "Above 55 to 60",
+      "employee_rate": 0.15,
+      "employer_rate": 0.145,
+      "total_rate": 0.295,
+      "allocation_wage_ratio": {
+        "oa": 0.12,
+        "sa": 0.07,
+        "ma": 0.105
+      },
+      "allocation_shares": {
+        "oa": 0.4068,
+        "sa": 0.2373,
+        "ma": 0.3559
+      }
+    },
+    {
+      "min_age": 61,
+      "max_age": 65,
+      "label": "Above 60 to 65",
+      "employee_rate": 0.095,
+      "employer_rate": 0.11,
+      "total_rate": 0.205,
+      "allocation_wage_ratio": {
+        "oa": 0.035,
+        "sa": 0.065,
+        "ma": 0.105
+      },
+      "allocation_shares": {
+        "oa": 0.1707,
+        "sa": 0.3171,
+        "ma": 0.5122
+      }
+    },
+    {
+      "min_age": 66,
+      "max_age": 70,
+      "label": "Above 65 to 70",
+      "employee_rate": 0.07,
+      "employer_rate": 0.085,
+      "total_rate": 0.155,
+      "allocation_wage_ratio": {
+        "oa": 0.01,
+        "sa": 0.04,
+        "ma": 0.105
+      },
+      "allocation_shares": {
+        "oa": 0.0645,
+        "sa": 0.2581,
+        "ma": 0.6774
+      }
+    },
+    {
+      "min_age": 71,
+      "max_age": 100,
+      "label": "Above 70",
+      "employee_rate": 0.05,
+      "employer_rate": 0.075,
+      "total_rate": 0.125,
+      "allocation_wage_ratio": {
+        "oa": 0.01,
+        "sa": 0.01,
+        "ma": 0.105
+      },
+      "allocation_shares": {
+        "oa": 0.0800,
+        "sa": 0.0800,
+        "ma": 0.8400
+      }
+    }
+  ],
+  "disclaimers": [
+    "2026 CPF Board rates for Singapore Citizens and Permanent Residents (Year 3+).",
+    "Monthly Ordinary Wage ceiling is $8,000; Annual ceiling is $102,000.",
+    "Not modelled: 1st/2nd year PR transitional rates, extra 1% bonus interest on first $60k, or CPF LIFE actuarial annuity pricing."
+  ]
+}

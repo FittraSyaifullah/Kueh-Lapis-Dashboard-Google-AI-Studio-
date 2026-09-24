@@ -1,0 +1,63 @@
+{
+  "version": "1.0",
+  "groups": [
+    {
+      "id": "housing",
+      "label": "Housing & Shelter",
+      "items": [
+        { "id": "exp_rent_mortgage", "label": "Rent / Mortgage (Cash portion)", "default_tag": "need", "default_period": "month" },
+        { "id": "exp_utilities", "label": "Utilities (SP Group / electricity / water)", "default_tag": "need", "default_period": "month" },
+        { "id": "exp_broadband_mobile", "label": "Broadband & Mobile Plans", "default_tag": "need", "default_period": "month" },
+        { "id": "exp_property_tax_town_council", "label": "Town Council / Conservancy / Property Tax", "default_tag": "need", "default_period": "month" }
+      ]
+    },
+    {
+      "id": "food",
+      "label": "Food & Sustenance",
+      "items": [
+        { "id": "exp_groceries", "label": "Groceries & Supermarket staples", "default_tag": "need", "default_period": "month" },
+        { "id": "exp_hawker_meals", "label": "Daily Meals & Hawker lunches", "default_tag": "need", "default_period": "month" },
+        { "id": "exp_dining_out", "label": "Dining Out, Cafes & Restaurants", "default_tag": "want", "default_period": "month" },
+        { "id": "exp_coffee_snacks", "label": "Coffee, Bubble Tea & Snacks", "default_tag": "want", "default_period": "month" }
+      ]
+    },
+    {
+      "id": "transport",
+      "label": "Transport & Mobility",
+      "items": [
+        { "id": "exp_public_transit", "label": "Public Transport (Bus / MRT)", "default_tag": "need", "default_period": "month" },
+        { "id": "exp_ride_hailing", "label": "Grab / Gojek / Taxi rides", "default_tag": "want", "default_period": "month" },
+        { "id": "exp_car_loan_petrol", "label": "Car Instalment, Petrol & Parking", "default_tag": "need", "default_period": "month" },
+        { "id": "exp_car_insurance_roadtax", "label": "Road Tax & Motor Insurance", "default_tag": "need", "default_period": "year" }
+      ]
+    },
+    {
+      "id": "family_health",
+      "label": "Family, Healthcare & Insurance",
+      "items": [
+        { "id": "exp_parent_allowance", "label": "Parent Allowance / Filial contribution", "default_tag": "need", "default_period": "month" },
+        { "id": "exp_child_school", "label": "Children Expenses & Tuition", "default_tag": "need", "default_period": "month" },
+        { "id": "exp_health_insurance", "label": "Hospital & Life Insurance (Cash premiums)", "default_tag": "need", "default_period": "year" },
+        { "id": "exp_medical_dental", "label": "Doctor, Specialist & Dental visits", "default_tag": "need", "default_period": "month" }
+      ]
+    },
+    {
+      "id": "lifestyle",
+      "label": "Lifestyle, Subscriptions & Leisure",
+      "items": [
+        { "id": "exp_streaming_subs", "label": "Subscriptions (Netflix, Spotify, Cloud)", "default_tag": "want", "default_period": "month" },
+        { "id": "exp_gym_fitness", "label": "Gym Membership / Fitness classes", "default_tag": "want", "default_period": "month" },
+        { "id": "exp_shopping_clothes", "label": "Shopping, Gadgets & Personal care", "default_tag": "want", "default_period": "month" },
+        { "id": "exp_travel_vacations", "label": "Annual Holidays & Short getaways", "default_tag": "want", "default_period": "year" }
+      ]
+    },
+    {
+      "id": "misc",
+      "label": "Miscellaneous & Commitments",
+      "items": [
+        { "id": "exp_gifts_festive", "label": "Angbaos, Weddings & Festive gifts", "default_tag": "want", "default_period": "year" },
+        { "id": "exp_charity_pets", "label": "Charity & Pet Care", "default_tag": "want", "default_period": "month" }
+      ]
+    }
+  ]
+}
