@@ -28,10 +28,11 @@ export const TopNavBar: React.FC<Props> = ({
 }) => {
   const navItems = [
     { id: 1, label: '01. Cash Flow', level: 1 },
-    { id: 2, label: '02. Runway', level: 1 },
-    { id: 3, label: '03. CPF', level: 2 },
-    { id: 4, label: '04. Lifestyle', level: 3 },
+    { id: 2, label: '02. Runway & Assets', level: 1 },
+    { id: 3, label: '03. CPF Social Security', level: 2 },
+    { id: 4, label: '04. Lifestyle & Inflation', level: 3 },
     { id: 5, label: '05. Freedom Gap', level: 4 },
+    { id: 6, label: '06. The Cake (Synthesis)', level: 4 },
   ];
 
   return (

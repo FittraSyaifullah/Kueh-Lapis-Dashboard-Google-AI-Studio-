@@ -11,6 +11,31 @@ export interface ExpenseItem {
   custom?: boolean;
 }
 
+export type SavingsBucketKey = 'cash' | 'endowment' | 'bonds' | 'equities' | 'other';
+
+export type InvestmentPolicyType = 'ilp' | 'endowment' | 'equities' | 'bonds' | 'annuity' | 'other';
+
+export interface InvestmentPolicy {
+  id: string;
+  name: string; // e.g. "AAG Wealth Accumulator", "Global Equity DCA", "Retirement Endowment"
+  policyType: InvestmentPolicyType;
+  currentValuation: number; // initial lump sum or current cash value
+  monthlyContribution: number; // monthly amount invested
+  expectedReturnRate: number; // annual rate of return (e.g. 0.06 for 6%)
+  startAge: number; // age when policy starts / started (e.g. 40 or 44)
+  targetAge?: number; // target maturity / retirement age (default: 60)
+}
+
+export interface InvestmentPolicyCalculation {
+  policy: InvestmentPolicy;
+  compoundingYears: number;
+  futureValueOfLumpSum: number;
+  futureValueOfContributions: number;
+  projectedValueAtRetirement: number;
+  totalInvestedOverTime: number;
+  projectedProfit: number;
+}
+
 export interface SavingsBuckets {
   cash: number;
   endowment: number;
@@ -18,6 +43,7 @@ export interface SavingsBuckets {
   equities: number;
   other: number;
   otherLabel?: string;
+  monthlyContributions?: Partial<Record<SavingsBucketKey, number>>;
 }
 
 export interface CpfData {
@@ -43,10 +69,14 @@ export interface PlanProfile {
 }
 
 export interface PlanIncome {
-  takeHomePay: number; // Level 0-1 net take-home
-  otherIncome: number;
-  grossSalary?: number; // Level 2
-  yearlyBonus?: number; // Level 2
+  takeHomePay: number; // Level 0-1 net take-home cash pay
+  otherIncome: number; // legacy fallback
+  grossSalary?: number; // Gross monthly wage
+  yearlyBonus?: number; // Annual bonus
+  investmentIncome?: number; // Dividends, interest & portfolio yield
+  rentalIncome?: number; // Rental property income
+  otherInflow?: number; // Side hustle, business, freelancing
+  autoCpfToTakeHome?: boolean; // When true, take-home is automatically calculated from gross minus employee CPF
 }
 
 export interface PlanLifestyle {
@@ -83,6 +113,8 @@ export interface Plan {
   income: PlanIncome;
   expenses: ExpenseItem[];
   savings: SavingsBuckets;
+  investmentPolicies?: InvestmentPolicy[]; // AAG feature: separate investment policies with individual start times & projections
+  targetSavingsRate?: number; // e.g. 0.25 for 25%
   cpf?: CpfData;
   lifestyle?: PlanLifestyle;
   returns?: PlanReturns;
@@ -207,16 +239,28 @@ export interface CalculatedResults {
 
   // Layer 1: Savings & Runway
   totalSavings: number;
+  totalMonthlyContribution: number;
   cashRunwayMonths: number;
   totalRunwayMonths: number;
+  wealthRunwayYears: number; // AAG Wealth Accumulation Runway: years left to retirement (e.g. 60 - 44 = 16 years)
+  spareCashMonthly: number; // Inflow - Outflow - Monthly Savings/Investments
+  targetSavingsRate: number; // Target savings rate (default or customized)
+  targetSavingsAmount: number; // Target dollar amount = monthlyIncome * targetSavingsRate
   cashRunwayBand: BandThreshold;
   totalRunwayBand: BandThreshold;
   bucketShares: {
-    key: keyof SavingsBuckets;
+    key: SavingsBucketKey;
     label: string;
     amount: number;
+    monthlyContribution: number;
     percentage: number;
   }[];
+
+  // AAG Feature: Investment Policies (individual start times & future value at age 60)
+  investmentPoliciesResults: InvestmentPolicyCalculation[];
+  totalInvestmentsValuation: number;
+  totalInvestmentsMonthlyContribution: number;
+  totalInvestmentsProjectedAtRetirement: number;
 
   // Layer 2: CPF (if age or gross salary provided)
   cpfCalculations?: {

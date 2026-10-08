@@ -19,8 +19,11 @@ import defaultThresholds from '../config/thresholds.json';
 
 export function calculateCashFlow(plan: Plan) {
   const takeHome = Math.max(0, plan.income.takeHomePay || 0);
-  const otherIncome = Math.max(0, plan.income.otherIncome || 0);
-  const monthlyIncome = takeHome + otherIncome;
+  const investmentIncome = Math.max(0, plan.income.investmentIncome || 0);
+  const rentalIncome = Math.max(0, plan.income.rentalIncome || 0);
+  const otherInflow = Math.max(0, plan.income.otherInflow || 0);
+  const legacyOther = Math.max(0, plan.income.otherIncome || 0);
+  const monthlyIncome = takeHome + investmentIncome + rentalIncome + otherInflow + legacyOther;
 
   let monthlyNeeds = 0;
   let monthlyWants = 0;
@@ -83,15 +86,72 @@ export function calculateCashFlow(plan: Plan) {
 export function calculateRunway(
   plan: Plan,
   monthlyExpenses: number,
+  monthlyIncome: number = 0,
   thresholds: ThresholdsConfig = defaultThresholds as ThresholdsConfig,
 ) {
+  const currentAge = plan.profile.age ?? 44;
+  const retirementAge = plan.profile.retirementAge ?? 60;
+  // AAG Wealth Accumulation Runway: Years remaining until retirement target
+  const wealthRunwayYears = Math.max(0, retirementAge - currentAge);
+
   const cash = Math.max(0, plan.savings?.cash || 0);
   const endowment = Math.max(0, plan.savings?.endowment || 0);
   const bonds = Math.max(0, plan.savings?.bonds || 0);
   const equities = Math.max(0, plan.savings?.equities || 0);
   const other = Math.max(0, plan.savings?.other || 0);
 
-  const totalSavings = cash + endowment + bonds + equities + other;
+  const contribs = plan.savings?.monthlyContributions || {};
+  const cashContrib = Math.max(0, contribs.cash || 0);
+  const endowContrib = Math.max(0, contribs.endowment || 0);
+  const bondsContrib = Math.max(0, contribs.bonds || 0);
+  const equitiesContrib = Math.max(0, contribs.equities || 0);
+  const otherContrib = Math.max(0, contribs.other || 0);
+
+  // AAG Feature: Investment policies calculation (separate start times and compounding to age 60)
+  const policies = plan.investmentPolicies || [];
+  let totalInvestmentsValuation = 0;
+  let totalInvestmentsMonthlyContribution = 0;
+  let totalInvestmentsProjectedAtRetirement = 0;
+
+  const investmentPoliciesResults = policies.map((pol) => {
+    const targetAge = pol.targetAge || retirementAge;
+    const compoundingYears = Math.max(0, targetAge - currentAge);
+    const r = Math.max(0, pol.expectedReturnRate || 0);
+    const lump = Math.max(0, pol.currentValuation || 0);
+    const monthly = Math.max(0, pol.monthlyContribution || 0);
+
+    const futureValueOfLumpSum = Math.round(lump * Math.pow(1 + r, compoundingYears));
+    let futureValueOfContributions = 0;
+    if (r > 0 && compoundingYears > 0) {
+      futureValueOfContributions = Math.round(
+        (monthly * 12) * ((Math.pow(1 + r, compoundingYears) - 1) / r)
+      );
+    } else {
+      futureValueOfContributions = Math.round(monthly * 12 * compoundingYears);
+    }
+
+    const projectedValueAtRetirement = futureValueOfLumpSum + futureValueOfContributions;
+    const totalInvestedOverTime = lump + (monthly * 12 * compoundingYears);
+    const projectedProfit = projectedValueAtRetirement - totalInvestedOverTime;
+
+    totalInvestmentsValuation += lump;
+    totalInvestmentsMonthlyContribution += monthly;
+    totalInvestmentsProjectedAtRetirement += projectedValueAtRetirement;
+
+    return {
+      policy: pol,
+      compoundingYears,
+      futureValueOfLumpSum,
+      futureValueOfContributions,
+      projectedValueAtRetirement,
+      totalInvestedOverTime,
+      projectedProfit,
+    };
+  });
+
+  const totalMonthlyContribution =
+    cashContrib + endowContrib + bondsContrib + equitiesContrib + otherContrib + totalInvestmentsMonthlyContribution;
+  const totalSavings = cash + endowment + bonds + equities + other + totalInvestmentsValuation;
 
   // Protect against division by zero (SW-19)
   const cashRunwayMonths = monthlyExpenses > 0 ? cash / monthlyExpenses : totalSavings > 0 ? 99 : 0;
@@ -100,21 +160,37 @@ export function calculateRunway(
   const cashRunwayBand = getRunwayBand(cashRunwayMonths, thresholds);
   const totalRunwayBand = getRunwayBand(totalRunwayMonths, thresholds);
 
+  // Spare cash = monthlyIncome - monthlyExpenses - totalMonthlyContribution
+  const spareCashMonthly = monthlyIncome - monthlyExpenses - totalMonthlyContribution;
+
+  // Target Savings Rate (editable by user)
+  const targetSavingsRate = plan.targetSavingsRate !== undefined ? plan.targetSavingsRate : 0.20;
+  const targetSavingsAmount = Math.round(monthlyIncome * targetSavingsRate);
+
   const bucketShares = [
-    { key: 'cash' as const, label: 'Cash & Deposits', amount: cash, percentage: totalSavings > 0 ? (cash / totalSavings) * 100 : 0 },
-    { key: 'endowment' as const, label: 'Endowments', amount: endowment, percentage: totalSavings > 0 ? (endowment / totalSavings) * 100 : 0 },
-    { key: 'bonds' as const, label: 'Bonds & SSB', amount: bonds, percentage: totalSavings > 0 ? (bonds / totalSavings) * 100 : 0 },
-    { key: 'equities' as const, label: 'Equities & ETFs', amount: equities, percentage: totalSavings > 0 ? (equities / totalSavings) * 100 : 0 },
-    { key: 'other' as const, label: plan.savings?.otherLabel || 'Other Assets', amount: other, percentage: totalSavings > 0 ? (other / totalSavings) * 100 : 0 },
+    { key: 'cash' as const, label: 'Cash & Deposits', amount: cash, monthlyContribution: cashContrib, percentage: totalSavings > 0 ? (cash / totalSavings) * 100 : 0 },
+    { key: 'endowment' as const, label: 'Endowments', amount: endowment, monthlyContribution: endowContrib, percentage: totalSavings > 0 ? (endowment / totalSavings) * 100 : 0 },
+    { key: 'bonds' as const, label: 'Bonds & SSB', amount: bonds, monthlyContribution: bondsContrib, percentage: totalSavings > 0 ? (bonds / totalSavings) * 100 : 0 },
+    { key: 'equities' as const, label: 'Equities & ETFs', amount: equities, monthlyContribution: equitiesContrib, percentage: totalSavings > 0 ? (equities / totalSavings) * 100 : 0 },
+    { key: 'other' as const, label: plan.savings?.otherLabel || 'Other Assets', amount: other + totalInvestmentsValuation, monthlyContribution: otherContrib + totalInvestmentsMonthlyContribution, percentage: totalSavings > 0 ? ((other + totalInvestmentsValuation) / totalSavings) * 100 : 0 },
   ];
 
   return {
     totalSavings,
+    totalMonthlyContribution,
     cashRunwayMonths,
     totalRunwayMonths,
+    wealthRunwayYears,
+    spareCashMonthly,
+    targetSavingsRate,
+    targetSavingsAmount,
     cashRunwayBand,
     totalRunwayBand,
     bucketShares,
+    investmentPoliciesResults,
+    totalInvestmentsValuation,
+    totalInvestmentsMonthlyContribution,
+    totalInvestmentsProjectedAtRetirement,
   };
 }
 
@@ -178,6 +254,7 @@ export function calculateRetirementGap(
   plan: Plan,
   monthlyExpenses: number,
   annualCashFlow: number,
+  investmentsProjectedFV: number = 0,
   assumptions: AssumptionsConfig = defaultAssumptions as AssumptionsConfig,
   thresholds: ThresholdsConfig = defaultThresholds as ThresholdsConfig,
 ) {
@@ -247,11 +324,24 @@ export function calculateRetirementGap(
 
   // 2. Future annual savings compounded to retirement
   const preRetRate = plan.returns?.preRetirementRate ?? assumptions.asset_classes.balanced.default_rate;
+  const contribs = plan.savings?.monthlyContributions;
+  const totalMonthlyContrib =
+    (contribs?.cash || 0) +
+    (contribs?.endowment || 0) +
+    (contribs?.bonds || 0) +
+    (contribs?.equities || 0) +
+    (contribs?.other || 0);
+
+  // If user has specific monthly contributions recorded, use totalMonthlyContrib * 12;
+  // otherwise fallback to annualCashFlow if surplus > 0.
+  const effectiveAnnualSavings =
+    totalMonthlyContrib > 0 ? totalMonthlyContrib * 12 : Math.max(0, annualCashFlow);
+
   let futureSavingsFV = 0;
-  if (annualCashFlow > 0 && preRetRate > 0) {
-    futureSavingsFV = annualCashFlow * ((Math.pow(1 + preRetRate, yearsToRetirement) - 1) / preRetRate);
-  } else if (annualCashFlow > 0) {
-    futureSavingsFV = annualCashFlow * yearsToRetirement;
+  if (effectiveAnnualSavings > 0 && preRetRate > 0) {
+    futureSavingsFV = effectiveAnnualSavings * ((Math.pow(1 + preRetRate, yearsToRetirement) - 1) / preRetRate);
+  } else if (effectiveAnnualSavings > 0) {
+    futureSavingsFV = effectiveAnnualSavings * yearsToRetirement;
   }
 
   // 3. CPF (if toggled on)
@@ -261,7 +351,10 @@ export function calculateRetirementGap(
     cpfContributionFV = cpfResults.projectedCpfAtRetirement;
   }
 
-  const projectedFundAtRetirement = Math.max(0, Math.round(grownSavings + futureSavingsFV + cpfContributionFV));
+  const projectedFundAtRetirement = Math.max(
+    0,
+    Math.round(grownSavings + futureSavingsFV + cpfContributionFV + investmentsProjectedFV),
+  );
 
   // % Funded
   const fundedPercentage = lumpSumNeeded > 0 ? projectedFundAtRetirement / lumpSumNeeded : 1.0;
@@ -291,7 +384,8 @@ export function calculateRetirementGap(
       (savings.bonds || 0) * Math.pow(1 + rBonds, tYears) +
       (savings.equities || 0) * Math.pow(1 + rEquities, tYears) +
       (savings.other || 0) * Math.pow(1 + rOther, tYears) +
-      (annualCashFlow > 0 && preRetRate > 0 ? annualCashFlow * ((Math.pow(1 + preRetRate, tYears) - 1) / preRetRate) : 0);
+      (effectiveAnnualSavings > 0 && preRetRate > 0 ? effectiveAnnualSavings * ((Math.pow(1 + preRetRate, tYears) - 1) / preRetRate) : 0) +
+      investmentsProjectedFV;
 
     if (projectedTestFund >= lsNeeded) {
       earliestRetirementAge = testAge;
@@ -316,7 +410,8 @@ export function calculateRetirementGap(
       (savings.bonds || 0) * Math.pow(1 + rBonds, tYears) +
       (savings.equities || 0) * Math.pow(1 + rEquities, tYears) +
       (savings.other || 0) * Math.pow(1 + rOther, tYears) +
-      (annualCashFlow > 0 && preRetRate > 0 ? annualCashFlow * ((Math.pow(1 + preRetRate, tYears) - 1) / preRetRate) : 0),
+      (effectiveAnnualSavings > 0 && preRetRate > 0 ? effectiveAnnualSavings * ((Math.pow(1 + preRetRate, tYears) - 1) / preRetRate) : 0) +
+      investmentsProjectedFV,
     );
 
     const ratio = ls > 0 ? proj / ls : 1;
@@ -361,7 +456,7 @@ export function calculatePlan(
   cpfRates: CpfRatesConfig = defaultCpfRates as CpfRatesConfig,
 ): CalculatedResults {
   const cashFlow = calculateCashFlow(plan);
-  const runway = calculateRunway(plan, cashFlow.monthlyExpenses, thresholds);
+  const runway = calculateRunway(plan, cashFlow.monthlyExpenses, cashFlow.monthlyIncome, thresholds);
   const savingsRateBand = getSavingsRateBand(cashFlow.savingsRate, thresholds);
 
   let cpfCalculations;
@@ -373,6 +468,7 @@ export function calculatePlan(
     plan,
     cashFlow.monthlyExpenses,
     cashFlow.annualCashFlow,
+    runway.totalInvestmentsProjectedAtRetirement,
     assumptions,
     thresholds,
   );

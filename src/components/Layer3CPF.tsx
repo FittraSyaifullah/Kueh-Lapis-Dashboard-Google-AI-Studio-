@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { HelpCircle, ArrowRight } from 'lucide-react';
+import { HelpCircle, ArrowRight, Sparkles, CheckCircle2, TrendingUp, AlertCircle, ArrowDownRight, Layers } from 'lucide-react';
 import { CalculatedResults, Plan } from '../engine/types.ts';
+import cpfRatesConfig from '../config/cpf-rates.json';
 
 interface Props {
   plan: Plan;
@@ -16,6 +17,8 @@ export const Layer3CPF: React.FC<Props> = ({
   onNextLayer,
 }) => {
   const [showWhyWeAsk, setShowWhyWeAsk] = useState(false);
+  const [simulatedAge, setSimulatedAge] = useState<number | null>(null);
+  const [syncedFeedback, setSyncedFeedback] = useState(false);
 
   const handleProfileChange = (field: 'age' | 'retirementAge', val: string) => {
     const num = Math.max(0, parseInt(val, 10) || 0);
@@ -37,6 +40,20 @@ export const Layer3CPF: React.FC<Props> = ({
     });
   };
 
+  const handleAutoPopulateTakeHome = () => {
+    if (!results.cpfCalculations) return;
+    const netSalary = results.cpfCalculations.netSalaryMonthly;
+    onUpdatePlan({
+      income: {
+        ...plan.income,
+        takeHomePay: netSalary,
+        autoCpfToTakeHome: true,
+      },
+    });
+    setSyncedFeedback(true);
+    setTimeout(() => setSyncedFeedback(false), 3000);
+  };
+
   const handleCpfFieldChange = (field: 'oa' | 'sa' | 'ma' | 'mortgageFromOA', val: string) => {
     const cleanNum = Math.max(0, Number(val.replace(/[^0-9.]/g, '')) || 0);
     onUpdatePlan({
@@ -51,6 +68,18 @@ export const Layer3CPF: React.FC<Props> = ({
   };
 
   const cpfCalcs = results.cpfCalculations;
+  const currentAge = plan.profile.age ?? 44;
+  const grossMonthly = Math.max(0, plan.income.grossSalary || 0);
+  const cappedWage = Math.min(grossMonthly, cpfRatesConfig.wage_ceiling_monthly);
+
+  // Active age for simulation view
+  const displayAge = simulatedAge ?? currentAge;
+  const activeAgeBand = cpfRatesConfig.age_bands.find((b) => displayAge >= b.min_age && displayAge <= b.max_age) || cpfRatesConfig.age_bands[0];
+  const simEmployeeCpf = Math.round(cappedWage * activeAgeBand.employee_rate);
+  const simEmployerCpf = Math.round(cappedWage * activeAgeBand.employer_rate);
+  const simOa = Math.round(cappedWage * activeAgeBand.allocation_wage_ratio.oa);
+  const simSa = Math.round(cappedWage * activeAgeBand.allocation_wage_ratio.sa);
+  const simMa = Math.round(cappedWage * activeAgeBand.allocation_wage_ratio.ma);
 
   return (
     <div className="space-y-8">
@@ -255,14 +284,38 @@ export const Layer3CPF: React.FC<Props> = ({
               </p>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 border border-stone-200/80 shadow-xs">
-              <div className="text-xs text-stone-500 font-medium mb-1.5">Calculated Net Salary</div>
-              <div className="text-3xl font-normal text-stone-950 font-mono-num">
-                ${cpfCalcs.netSalaryMonthly.toLocaleString()}
+            <div className="bg-white rounded-2xl p-6 border border-stone-200/80 shadow-xs flex flex-col justify-between">
+              <div>
+                <div className="text-xs text-stone-500 font-medium mb-1.5">Calculated Net Take-Home</div>
+                <div className="text-3xl font-normal text-stone-950 font-mono-num font-bold">
+                  ${cpfCalcs.netSalaryMonthly.toLocaleString()}
+                </div>
+                <p className="text-xs text-stone-500 mt-1 font-light">
+                  Gross (${grossMonthly.toLocaleString()}) minus ${(cpfCalcs.employeeCpfMonthly).toLocaleString()} CPF
+                </p>
               </div>
-              <p className="text-xs text-stone-500 mt-2 font-light">
-                Gross minus employee CPF share
-              </p>
+
+              <button
+                type="button"
+                onClick={handleAutoPopulateTakeHome}
+                className={`mt-3 w-full flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-xl transition-all cursor-pointer ${
+                  syncedFeedback
+                    ? 'bg-emerald-600 text-white shadow-xs'
+                    : 'text-amber-950 bg-amber-100 hover:bg-amber-200 border border-amber-300'
+                }`}
+              >
+                {syncedFeedback ? (
+                  <>
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    <span>✓ Synced to Cash Flow (${cpfCalcs.netSalaryMonthly.toLocaleString()})</span>
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-3.5 h-3.5 text-amber-800" />
+                    <span>Auto-Populate into Cash Flow</span>
+                  </>
+                )}
+              </button>
             </div>
           </div>
 
@@ -323,6 +376,149 @@ export const Layer3CPF: React.FC<Props> = ({
                 <p className="text-xs text-stone-500 mt-3 pt-3 border-t border-stone-200 font-light leading-relaxed">
                   Health insurance (MediShield Life, CareShield Life) and approved hospitalization expenses.
                 </p>
+              </div>
+            </div>
+
+            {/* Dynamic Age Progression: How CPF Changes as You Age */}
+            <div className="mt-8 pt-6 border-t border-stone-200 space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h4 className="text-base font-bold text-stone-950 font-display flex items-center gap-2">
+                    <TrendingUp className="w-4 h-4 text-amber-800" />
+                    <span>How Your CPF Changes as You Grow Older</span>
+                  </h4>
+                  <p className="text-xs text-stone-600 font-light mt-0.5">
+                    As age increases, statutory CPF allocation shifts away from OA towards MediSave and retirement reserves.
+                  </p>
+                </div>
+                <div className="flex items-center gap-2 text-xs">
+                  <span className="text-stone-500">Simulate Age:</span>
+                  <select
+                    value={displayAge}
+                    onChange={(e) => setSimulatedAge(parseInt(e.target.value, 10))}
+                    className="bg-stone-100 border border-stone-300 rounded-lg px-2.5 py-1 text-xs font-mono-num font-bold text-stone-900 outline-none"
+                  >
+                    <option value={30}>Age 30 (≤35)</option>
+                    <option value={44}>Age 44 (36-45, Current)</option>
+                    <option value={48}>Age 48 (46-50)</option>
+                    <option value={53}>Age 53 (51-55)</option>
+                    <option value={58}>Age 58 (56-60)</option>
+                    <option value={63}>Age 63 (61-65)</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Age Band Progression Grid */}
+              <div className="overflow-x-auto">
+                <table className="w-full text-xs text-left">
+                  <thead>
+                    <tr className="border-b border-stone-200 text-stone-600 font-semibold text-[10px] uppercase">
+                      <th className="py-2.5 pr-2">Age Band</th>
+                      <th className="py-2.5 px-2 text-right">Total Rate</th>
+                      <th className="py-2.5 px-2 text-right">OA Allocation</th>
+                      <th className="py-2.5 px-2 text-right">SA Allocation</th>
+                      <th className="py-2.5 px-2 text-right">MA Allocation</th>
+                      <th className="py-2.5 px-3 text-right font-bold text-stone-900">Total Monthly CPF</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-stone-100 font-mono-num text-[11px]">
+                    {cpfRatesConfig.age_bands.slice(0, 6).map((b) => {
+                      const isCurrent = currentAge >= b.min_age && currentAge <= b.max_age;
+                      const isSimulated = displayAge >= b.min_age && displayAge <= b.max_age;
+                      const bandTotal = Math.round(cappedWage * b.total_rate);
+                      const bOA = Math.round(cappedWage * b.allocation_wage_ratio.oa);
+                      const bSA = Math.round(cappedWage * b.allocation_wage_ratio.sa);
+                      const bMA = Math.round(cappedWage * b.allocation_wage_ratio.ma);
+
+                      return (
+                        <tr
+                          key={b.label}
+                          className={`transition-colors ${
+                            isSimulated
+                              ? 'bg-amber-100/60 font-semibold text-stone-950'
+                              : isCurrent
+                              ? 'bg-amber-50/40 text-stone-900'
+                              : 'hover:bg-stone-50 text-stone-600'
+                          }`}
+                        >
+                          <td className="py-2.5 pr-2 font-sans font-medium flex items-center gap-1.5">
+                            <span>{b.label}</span>
+                            {isCurrent && (
+                              <span className="text-[9px] uppercase px-1.5 py-0.5 rounded bg-amber-800 text-white font-bold">
+                                You
+                              </span>
+                            )}
+                          </td>
+                          <td className="py-2.5 px-2 text-right">{(b.total_rate * 100).toFixed(1)}%</td>
+                          <td className="py-2.5 px-2 text-right text-stone-900">
+                            ${bOA.toLocaleString()} <span className="text-[10px] text-stone-400">({(b.allocation_wage_ratio.oa * 100).toFixed(0)}%)</span>
+                          </td>
+                          <td className="py-2.5 px-2 text-right text-stone-900">
+                            ${bSA.toLocaleString()} <span className="text-[10px] text-stone-400">({(b.allocation_wage_ratio.sa * 100).toFixed(0)}%)</span>
+                          </td>
+                          <td className="py-2.5 px-2 text-right text-stone-900">
+                            ${bMA.toLocaleString()} <span className="text-[10px] text-stone-400">({(b.allocation_wage_ratio.ma * 100).toFixed(1)}%)</span>
+                          </td>
+                          <td className="py-2.5 px-3 text-right font-bold text-stone-950">
+                            ${bandTotal.toLocaleString()}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Crucial Advisory Note */}
+              <div className="p-4 bg-stone-50 rounded-2xl border border-stone-200/80 text-xs text-stone-700 leading-relaxed space-y-1">
+                <span className="font-semibold text-stone-900 block flex items-center gap-1">
+                  <AlertCircle className="w-3.5 h-3.5 text-amber-800" />
+                  <span>Advisor Takeaway: Housing Mortgage Alert</span>
+                </span>
+                <p className="font-light">
+                  At age 44, your OA share is <strong>${Math.round(cappedWage * 0.21).toLocaleString()}/mo</strong>. Once you cross age 45 (Band 46-50), OA drops to <strong>${Math.round(cappedWage * 0.19).toLocaleString()}/mo</strong>. If your current monthly mortgage is <strong>${(plan.cpf?.mortgageFromOA || 0).toLocaleString()}/mo</strong>, ensure that future OA inflows will continue to cover home loan installments without requiring unplanned out-of-pocket cash top-ups.
+                </p>
+              </div>
+            </div>
+
+            {/* Spare Cash Reconciliation Card */}
+            <div className="mt-6 p-5 rounded-2xl bg-emerald-50/60 border border-emerald-200/80 text-xs text-emerald-950">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
+                <div>
+                  <span className="font-bold text-sm block">Comprehensive Cash & Spare Surplus Reconciler</span>
+                  <p className="font-light text-stone-600 mt-0.5">
+                    Clear tally from gross wages through statutory deductions, living expenses, and investments
+                  </p>
+                </div>
+                <div className="text-right">
+                  <span className="text-[10px] text-stone-500 uppercase block font-semibold">Uncommitted Spare Cash</span>
+                  <span className="text-xl font-bold font-mono-num text-emerald-900">
+                    {results.spareCashMonthly >= 0 ? '+' : '-'}${Math.round(Math.abs(results.spareCashMonthly)).toLocaleString()} / mo
+                  </span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 pt-2 border-t border-emerald-200/60 font-mono-num text-center">
+                <div className="p-2 bg-white/70 rounded-xl">
+                  <span className="text-[10px] text-stone-500 font-sans block">Gross Salary</span>
+                  <span className="font-semibold text-stone-900">${grossMonthly.toLocaleString()}</span>
+                </div>
+                <div className="p-2 bg-white/70 rounded-xl">
+                  <span className="text-[10px] text-stone-500 font-sans block">Employee CPF</span>
+                  <span className="font-semibold text-stone-900">-${cpfCalcs.employeeCpfMonthly.toLocaleString()}</span>
+                </div>
+                <div className="p-2 bg-white/70 rounded-xl">
+                  <span className="text-[10px] text-stone-500 font-sans block">Living Outflows</span>
+                  <span className="font-semibold text-rose-800">-${Math.round(results.monthlyExpenses).toLocaleString()}</span>
+                </div>
+                <div className="p-2 bg-white/70 rounded-xl">
+                  <span className="text-[10px] text-stone-500 font-sans block">Invest & Savings</span>
+                  <span className="font-semibold text-amber-900">-${Math.round(results.totalMonthlyContribution).toLocaleString()}</span>
+                </div>
+                <div className="p-2 bg-emerald-100/80 rounded-xl border border-emerald-300 font-bold text-emerald-950 col-span-2 sm:col-span-1">
+                  <span className="text-[10px] text-emerald-800 font-sans block">Spare Cash Left</span>
+                  <span>{results.spareCashMonthly >= 0 ? '+' : '-'}${Math.round(Math.abs(results.spareCashMonthly)).toLocaleString()}</span>
+                </div>
               </div>
             </div>
 

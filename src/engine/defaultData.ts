@@ -1,5 +1,38 @@
-import { Plan } from './types.ts';
+import { InvestmentPolicy, Plan } from './types.ts';
 import defaultExpenses from '../config/expenses.json';
+
+export const SAMPLE_AAG_POLICIES: InvestmentPolicy[] = [
+  {
+    id: 'pol_aag_1',
+    name: 'AAG Wealth Accumulator (ILP)',
+    policyType: 'ilp',
+    currentValuation: 25000,
+    monthlyContribution: 300,
+    expectedReturnRate: 0.065, // 6.5% p.a.
+    startAge: 38,
+    targetAge: 60,
+  },
+  {
+    id: 'pol_aag_2',
+    name: 'Global All-World Equity ETF (VWRA)',
+    policyType: 'equities',
+    currentValuation: 18000,
+    monthlyContribution: 400,
+    expectedReturnRate: 0.07, // 7.0% p.a.
+    startAge: 40,
+    targetAge: 60,
+  },
+  {
+    id: 'pol_aag_3',
+    name: 'Great Eastern 15-Yr Endowment Plan',
+    policyType: 'endowment',
+    currentValuation: 12000,
+    monthlyContribution: 250,
+    expectedReturnRate: 0.038, // 3.8% p.a.
+    startAge: 44,
+    targetAge: 60,
+  },
+];
 
 export const BLANK_PLAN: Plan = {
   version: '1.0',
@@ -18,6 +51,10 @@ export const BLANK_PLAN: Plan = {
     otherIncome: 0,
     grossSalary: 0,
     yearlyBonus: 0,
+    investmentIncome: 0,
+    rentalIncome: 0,
+    otherInflow: 0,
+    autoCpfToTakeHome: false,
   },
   expenses: defaultExpenses.groups.flatMap((g) =>
     g.items.map((it) => ({
@@ -37,7 +74,16 @@ export const BLANK_PLAN: Plan = {
     equities: 0,
     other: 0,
     otherLabel: 'Other Assets',
+    monthlyContributions: {
+      cash: 0,
+      endowment: 0,
+      bonds: 0,
+      equities: 0,
+      other: 0,
+    },
   },
+  investmentPolicies: [],
+  targetSavingsRate: 0.2,
   cpf: {
     oa: 0,
     sa: 0,
@@ -95,6 +141,10 @@ export const SAMPLE_DEMO_PLAN: Plan = {
     otherIncome: 0,
     grossSalary: 7500,
     yearlyBonus: 7500,
+    investmentIncome: 0,
+    rentalIncome: 0,
+    otherInflow: 0,
+    autoCpfToTakeHome: false,
   },
   expenses: [
     { id: 'exp_rent_mortgage', group: 'Housing & Shelter', label: 'Rent / Mortgage (Cash portion)', amount: 1100, period: 'month', tag: 'need', custom: false },
@@ -116,7 +166,16 @@ export const SAMPLE_DEMO_PLAN: Plan = {
     equities: 6000,
     other: 0,
     otherLabel: 'Other Assets',
+    monthlyContributions: {
+      cash: 450,
+      endowment: 0,
+      bonds: 0,
+      equities: 500,
+      other: 0,
+    },
   },
+  investmentPolicies: [],
+  targetSavingsRate: 0.25,
   cpf: {
     oa: 65000,
     sa: 45000,

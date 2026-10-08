@@ -40,6 +40,13 @@ export function runEngineTests(): { passed: boolean; results: { name: string; ok
     message: `Expected $18,000, got $${runway.totalSavings}`,
   });
 
+  const monthlyContribOk = runway.totalMonthlyContribution === 950;
+  tests.push({
+    name: 'Level 1 Monthly Contribution Vector ($950/mo)',
+    ok: monthlyContribOk,
+    message: `Expected $950, got $${runway.totalMonthlyContribution}`,
+  });
+
   // Vector 2: CPF split for 44-year-old sample with gross salary $7,500
   // OA share should be exactly $1,575 a month
   const cpf = calculateCpf(plan);
@@ -50,8 +57,41 @@ export function runEngineTests(): { passed: boolean; results: { name: string; ok
     message: `Expected $1,575 OA share, got $${cpf.oaMonthly}`,
   });
 
-  // Master calculation
+  // Vector 3: AAG Wealth Accumulation Runway (44yo retiring at 60 = 16 years left to build wealth)
   const master = calculatePlan(plan);
+  const runwayYearsOk = master.wealthRunwayYears === 16;
+  tests.push({
+    name: 'AAG Wealth Accumulation Runway Vector (16 years)',
+    ok: runwayYearsOk,
+    message: `Expected 16 years runway, got ${master.wealthRunwayYears} years`,
+  });
+
+  // Vector 4: AAG Investment Policy Compounding Vector
+  const testPlanWithPolicy = {
+    ...plan,
+    investmentPolicies: [
+      {
+        id: 'test_pol_1',
+        name: 'AAG Wealth Accumulator',
+        policyType: 'ilp' as const,
+        currentValuation: 10000,
+        monthlyContribution: 200,
+        expectedReturnRate: 0.06,
+        startAge: 44,
+        targetAge: 60,
+      },
+    ],
+  };
+  const policyResults = calculateRunway(testPlanWithPolicy, 3250, 4200);
+  const polComp = policyResults.investmentPoliciesResults[0];
+  const polOk = polComp && polComp.projectedValueAtRetirement > 80000 && polComp.compoundingYears === 16;
+  tests.push({
+    name: 'AAG Investment Policy Compounding Vector (16 yrs @ 6%)',
+    ok: !!polOk,
+    message: `Projected at 60: $${polComp?.projectedValueAtRetirement.toLocaleString()} (compounding years: ${polComp?.compoundingYears})`,
+  });
+
+  // Master calculation
   tests.push({
     name: 'Master Plan Calculation Completeness',
     ok: master.lumpSumNeeded > 0 && master.projectedFundAtRetirement > 0,

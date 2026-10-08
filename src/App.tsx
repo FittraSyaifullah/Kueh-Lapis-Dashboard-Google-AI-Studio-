@@ -15,7 +15,7 @@ import { ConsentModal } from './components/ConsentModal.tsx';
 import { GlossaryModal } from './components/GlossaryModal.tsx';
 import { PrintReport } from './components/PrintReport.tsx';
 import { ProfileModal } from './components/ProfileModal.tsx';
-import { ShieldCheck, Sparkles, Layers, User } from 'lucide-react';
+import { ShieldCheck, Sparkles, Layers, User, Clock, ArrowRight, Wallet, CheckCircle2, ChevronRight, Cake } from 'lucide-react';
 
 export default function App() {
   // Read initial query params if present
@@ -136,103 +136,376 @@ export default function App() {
 
       {/* Main Workspace Container */}
       <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-8 sm:py-10 space-y-8">
-        {/* Editorial Reader Masthead */}
-        <header className="border-b border-stone-200/80 pb-8 space-y-4">
-          <div className="flex items-center gap-2 text-xs text-stone-500 font-medium">
-            <span>Overhaul SG × AAG Financial Workshops</span>
-            <span className="text-stone-300">·</span>
-            <span>Session {plan.sessionCode}</span>
-            <span className="text-stone-300">·</span>
-            <span className="text-emerald-800">100% Private (Runs On-Device)</span>
+        {/* Editorial Reader Masthead with iPad-Optimized Client Profile Inputs at the Top */}
+        <header className="border-b border-stone-200/80 pb-6 space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-stone-500 font-medium">
+            <div className="flex items-center gap-2">
+              <span className="font-semibold text-stone-800">Overhaul SG × AAG Financial Advisory</span>
+              <span className="text-stone-300">·</span>
+              <span>Session {plan.sessionCode}</span>
+              <span className="text-stone-300">·</span>
+              <span className="text-emerald-800 font-medium">100% Private (Runs On-Device)</span>
+            </div>
+            <div className="flex items-center gap-2 text-stone-600">
+              <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-950 font-semibold text-[11px]">
+                iPad Point-of-Interaction Mode
+              </span>
+            </div>
           </div>
 
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <div className="max-w-2xl">
-              <h1 className="text-4xl sm:text-5xl font-normal tracking-tight font-display text-stone-950 leading-[1.15]">
-                Layer by layer, slice by slice.
-              </h1>
-              <p className="text-base sm:text-lg text-stone-600 font-light mt-3 leading-relaxed">
-                Build your personal financial blueprint step by step. Answer three foundational questions: Where does my money go? What is left each month? And is it enough for the life I want?
-              </p>
+          {/* iPad & Mobile Client Name & Wealth Runway Command Deck (Top Inputs) */}
+          <div className="bg-white rounded-3xl p-5 sm:p-7 border border-stone-200 shadow-sm space-y-5">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-stone-100">
+              <div>
+                <span className="text-[11px] font-semibold text-amber-900 uppercase tracking-wider block">
+                  AAG Advisor Consultation Deck
+                </span>
+                <h1 className="text-2xl sm:text-3xl font-normal text-stone-950 font-display tracking-tight mt-0.5">
+                  Client Profile & Wealth Accumulation Runway
+                </h1>
+              </div>
 
-              {/* Participant Profile Banner */}
-              <div className="flex items-center gap-3 mt-4 text-xs text-stone-600">
-                <span className="flex items-center gap-1.5 font-medium text-stone-900">
-                  <User className="w-3.5 h-3.5 text-stone-400" />
-                  {plan.profile.name || 'Anonymous Attendee'}
-                </span>
-                <span className="text-stone-300">·</span>
-                <span>
-                  Age {plan.profile.age || 44} → Target Retire {plan.profile.retirementAge || 60}
-                </span>
-                <span className="text-stone-300">·</span>
-                <button
-                  type="button"
-                  onClick={() => setIsProfileOpen(true)}
-                  className="text-amber-800 hover:text-amber-950 font-medium underline underline-offset-2 transition-colors cursor-pointer"
-                >
-                  Edit Timeline
-                </button>
+              {/* Wealth Accumulation Runway Hero Badge (e.g. 16 Years Left: 60 - 44) */}
+              <div className="flex items-center gap-3 bg-amber-50/90 border border-amber-300 px-4 py-2.5 rounded-2xl shrink-0 shadow-2xs">
+                <Clock className="w-5 h-5 text-amber-800 shrink-0" />
+                <div>
+                  <span className="text-[10px] text-amber-900 font-semibold uppercase block">
+                    Wealth Accumulation Runway
+                  </span>
+                  <div className="text-lg sm:text-xl font-bold font-mono-num text-amber-950 flex items-baseline gap-1">
+                    <span>{results.wealthRunwayYears} Years Left</span>
+                    <span className="text-xs font-normal text-stone-600 font-sans">
+                      (Age {plan.profile.age || 44} → {plan.profile.retirementAge || 60})
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Quick Balance Summary Strip (Clickable & Unboxed Typography) */}
-            <div className="flex flex-wrap sm:flex-nowrap items-center gap-6 text-xs text-stone-600 shrink-0 font-mono-num pt-2 md:pt-0">
-              <button
-                type="button"
-                onClick={() => setActiveLayer(1)}
-                className="border-l border-stone-200 hover:border-emerald-600 pl-3 text-left transition-all group cursor-pointer"
-                title="Click to view Chapter 01: Cash Flow Bedrock"
-              >
-                <span className="text-[11px] font-sans text-stone-400 group-hover:text-emerald-700 block font-light transition-colors">
-                  Monthly Net Flow
+            {/* Top Inputs: Name, Age, Target Retirement Age (Touch-Optimized for iPad & iPhone with Steppers) */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {/* Client Name Input */}
+              <div className="space-y-1.5">
+                <label className="block text-xs font-semibold text-stone-700">
+                  Client Name / Identifier
+                </label>
+                <div className="relative">
+                  <User className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    value={plan.profile.name || ''}
+                    onChange={(e) =>
+                      handleUpdatePlan({
+                        profile: { ...plan.profile, name: e.target.value },
+                      })
+                    }
+                    placeholder="e.g. Sarah Tan"
+                    className="w-full pl-10 pr-3 py-2.5 min-h-[44px] bg-stone-50 border border-stone-300 rounded-xl text-sm font-medium text-stone-900 focus:bg-white focus:border-amber-700 focus:ring-1 focus:ring-amber-700 outline-none transition-all"
+                  />
+                </div>
+                <span className="text-[11px] text-stone-500 font-light block">
+                  Advisor point-of-interaction identifier
                 </span>
-                <span className={`text-base font-medium transition-transform group-hover:scale-105 inline-block ${results.monthlyCashFlow >= 0 ? 'text-emerald-800' : 'text-rose-800'}`}>
-                  {results.monthlyCashFlow >= 0 ? '+' : '-'}${Math.round(Math.abs(results.monthlyCashFlow)).toLocaleString()}
-                </span>
-              </button>
+              </div>
 
-              <button
-                type="button"
-                onClick={() => setActiveLayer(2)}
-                className="border-l border-stone-200 hover:border-stone-500 pl-3 text-left transition-all group cursor-pointer"
-                title="Click to inspect Chapter 02: Emergency Runway"
-              >
-                <span className="text-[11px] font-sans text-stone-400 group-hover:text-stone-700 block font-light transition-colors">
-                  Emergency Runway
+              {/* Client Current Age with Touch Steppers */}
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <label className="block text-xs font-semibold text-stone-700">
+                    Current Age
+                  </label>
+                  <span className="text-[11px] text-stone-400 font-mono-num">Starting Age</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const cur = plan.profile.age || 44;
+                      if (cur > 18) {
+                        handleUpdatePlan({ profile: { ...plan.profile, age: cur - 1 } });
+                      }
+                    }}
+                    className="w-10 h-[44px] shrink-0 bg-stone-100 hover:bg-stone-200 border border-stone-300 rounded-xl font-bold text-stone-700 flex items-center justify-center transition-all cursor-pointer text-base active:scale-95"
+                    title="Decrease age by 1"
+                  >
+                    -
+                  </button>
+                  <input
+                    type="number"
+                    min="18"
+                    max="90"
+                    value={plan.profile.age || ''}
+                    onChange={(e) => {
+                      const num = parseInt(e.target.value, 10) || 0;
+                      handleUpdatePlan({
+                        profile: { ...plan.profile, age: num },
+                      });
+                    }}
+                    placeholder="44"
+                    className="w-full px-3 py-2.5 min-h-[44px] bg-stone-50 border border-stone-300 rounded-xl text-sm font-mono-num font-bold text-center text-stone-900 focus:bg-white focus:border-amber-700 focus:ring-1 focus:ring-amber-700 outline-none transition-all"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const cur = plan.profile.age || 44;
+                      if (cur < 85) {
+                        handleUpdatePlan({ profile: { ...plan.profile, age: cur + 1 } });
+                      }
+                    }}
+                    className="w-10 h-[44px] shrink-0 bg-stone-100 hover:bg-stone-200 border border-stone-300 rounded-xl font-bold text-stone-700 flex items-center justify-center transition-all cursor-pointer text-base active:scale-95"
+                    title="Increase age by 1"
+                  >
+                    +
+                  </button>
+                </div>
+                <span className="text-[11px] text-stone-500 font-light block">
+                  Determines statutory CPF rates & wealth runway
                 </span>
-                <span className="text-base font-medium text-stone-900 group-hover:scale-105 inline-block transition-transform">
-                  {results.cashRunwayMonths.toFixed(1)} mo
-                </span>
-              </button>
+              </div>
 
-              <button
-                type="button"
-                onClick={() => setActiveLayer(5)}
-                className="border-l border-stone-200 hover:border-amber-600 pl-3 text-left transition-all group cursor-pointer"
-                title="Click to review Chapter 05: Retirement Gap"
-              >
-                <span className="text-[11px] font-sans text-stone-400 group-hover:text-amber-700 block font-light transition-colors">
-                  Retirement Target
+              {/* Target Retirement Age with Touch Steppers */}
+              <div className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <label className="block text-xs font-semibold text-stone-700">
+                    Target Retirement Age
+                  </label>
+                  <span className="text-[11px] text-stone-400 font-mono-num">Horizon Target</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const cur = plan.profile.retirementAge || 60;
+                      if (cur > (plan.profile.age || 44)) {
+                        handleUpdatePlan({ profile: { ...plan.profile, retirementAge: cur - 1 } });
+                      }
+                    }}
+                    className="w-10 h-[44px] shrink-0 bg-stone-100 hover:bg-stone-200 border border-stone-300 rounded-xl font-bold text-stone-700 flex items-center justify-center transition-all cursor-pointer text-base active:scale-95"
+                    title="Decrease retirement age by 1"
+                  >
+                    -
+                  </button>
+                  <input
+                    type="number"
+                    min="35"
+                    max="95"
+                    value={plan.profile.retirementAge || ''}
+                    onChange={(e) => {
+                      const num = parseInt(e.target.value, 10) || 0;
+                      handleUpdatePlan({
+                        profile: { ...plan.profile, retirementAge: num },
+                      });
+                    }}
+                    placeholder="60"
+                    className="w-full px-3 py-2.5 min-h-[44px] bg-stone-50 border border-stone-300 rounded-xl text-sm font-mono-num font-bold text-center text-stone-900 focus:bg-white focus:border-amber-700 focus:ring-1 focus:ring-amber-700 outline-none transition-all"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const cur = plan.profile.retirementAge || 60;
+                      if (cur < 90) {
+                        handleUpdatePlan({ profile: { ...plan.profile, retirementAge: cur + 1 } });
+                      }
+                    }}
+                    className="w-10 h-[44px] shrink-0 bg-stone-100 hover:bg-stone-200 border border-stone-300 rounded-xl font-bold text-stone-700 flex items-center justify-center transition-all cursor-pointer text-base active:scale-95"
+                    title="Increase retirement age by 1"
+                  >
+                    +
+                  </button>
+                </div>
+                <span className="text-[11px] text-amber-900 font-medium block">
+                  Wealth runway: {Math.max(0, (plan.profile.retirementAge || 60) - (plan.profile.age || 44))} years to compound
                 </span>
-                <span className="text-base font-medium text-stone-900 group-hover:scale-105 inline-block transition-transform">
-                  {results.lumpSumNeeded > 0 ? `$${Math.round(results.lumpSumNeeded / 1000).toLocaleString()}k` : '—'}
+              </div>
+            </div>
+
+            {/* Advisor Fast-Track Bar: Gross Salary CPF Auto-Sync & Target Savings Selector */}
+            <div className="pt-3 border-t border-stone-100 grid grid-cols-1 md:grid-cols-2 gap-4 items-center bg-stone-50/70 p-3.5 rounded-2xl">
+              {/* Gross Salary + Auto-Populate Take-Home & CPF */}
+              <div className="space-y-1">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-semibold text-stone-800 flex items-center gap-1.5">
+                    <Sparkles className="w-3.5 h-3.5 text-amber-800" />
+                    <span>Gross Base Salary & Statutory CPF Sync</span>
+                  </span>
+                  {results.cpfCalculations && (
+                    <span className="text-[11px] text-stone-500 font-mono-num">
+                      Employee CPF: -${results.cpfCalculations.employeeCpfMonthly.toLocaleString()}/mo
+                    </span>
+                  )}
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="relative flex-1">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 text-xs font-mono-num">$</span>
+                    <input
+                      type="text"
+                      inputMode="decimal"
+                      value={plan.income.grossSalary ? plan.income.grossSalary.toLocaleString() : ''}
+                      onChange={(e) => {
+                        const cleanNum = Math.max(0, Number(e.target.value.replace(/[^0-9.]/g, '')) || 0);
+                        handleUpdatePlan({
+                          income: {
+                            ...plan.income,
+                            grossSalary: cleanNum,
+                          },
+                        });
+                      }}
+                      placeholder="7,500"
+                      className="w-full pl-7 pr-3 py-2 min-h-[40px] bg-white border border-stone-300 rounded-xl text-xs font-mono-num font-bold text-stone-900 outline-none focus:border-amber-700"
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (results.cpfCalculations) {
+                        handleUpdatePlan({
+                          income: {
+                            ...plan.income,
+                            takeHomePay: results.cpfCalculations.netSalaryMonthly,
+                            autoCpfToTakeHome: true,
+                          },
+                        });
+                      }
+                    }}
+                    className="px-3.5 py-2 min-h-[40px] bg-amber-200/90 hover:bg-amber-300 border border-amber-300 text-amber-950 text-xs font-bold rounded-xl transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer shrink-0"
+                    title="Auto-compute 2026 CPF based on age and update Take-Home Pay"
+                  >
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    <span>Auto-Populate Take-Home</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Target Savings Rate Quick Chips */}
+              <div className="space-y-1">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-semibold text-stone-800">Target Savings Rate Setting</span>
+                  <span className="font-mono-num font-bold text-amber-950">
+                    {((plan.targetSavingsRate ?? 0.20) * 100).toFixed(0)}% (${Math.round(results.monthlyIncome * (plan.targetSavingsRate ?? 0.20)).toLocaleString()}/mo)
+                  </span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  {[0.10, 0.15, 0.20, 0.25, 0.30, 0.40].map((rate) => {
+                    const isSelected = Math.abs((plan.targetSavingsRate ?? 0.20) - rate) < 0.01;
+                    return (
+                      <button
+                        key={rate}
+                        type="button"
+                        onClick={() => handleUpdatePlan({ targetSavingsRate: rate })}
+                        className={`flex-1 py-1.5 min-h-[40px] rounded-xl text-xs font-mono-num font-bold transition-all cursor-pointer ${
+                          isSelected
+                            ? 'bg-amber-900 text-amber-50 shadow-xs ring-1 ring-amber-950'
+                            : 'bg-white hover:bg-stone-100 border border-stone-200 text-stone-700'
+                        }`}
+                      >
+                        {(rate * 100).toFixed(0)}%
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Primary Inflow, Outflow, Spare Cash & Savings Rate Deck (Moved to Top!) */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 pt-1 font-mono-num">
+            {/* 1. Monthly Net Inflow */}
+            <button
+              type="button"
+              onClick={() => setActiveLayer(1)}
+              className="p-4 bg-white hover:bg-stone-50 border border-stone-200/90 rounded-2xl text-left transition-all group cursor-pointer shadow-2xs"
+            >
+              <span className="text-[11px] font-sans text-stone-500 group-hover:text-stone-900 block transition-colors">
+                1. Monthly Net Inflow
+              </span>
+              <span className="text-xl sm:text-2xl font-bold text-stone-950 block mt-1">
+                ${Math.round(results.monthlyIncome).toLocaleString()}
+              </span>
+              <span className="text-[10px] font-sans text-stone-400 block mt-0.5 truncate">
+                Salary + Investments + Side
+              </span>
+            </button>
+
+            {/* 2. Monthly Outflow / Expenses */}
+            <button
+              type="button"
+              onClick={() => setActiveLayer(1)}
+              className="p-4 bg-white hover:bg-stone-50 border border-stone-200/90 rounded-2xl text-left transition-all group cursor-pointer shadow-2xs"
+            >
+              <span className="text-[11px] font-sans text-stone-500 group-hover:text-stone-900 block transition-colors">
+                2. Living Expenses
+              </span>
+              <span className="text-xl sm:text-2xl font-bold text-stone-950 block mt-1">
+                ${Math.round(results.monthlyExpenses).toLocaleString()}
+              </span>
+              <span className="text-[10px] font-sans text-stone-400 block mt-0.5 truncate">
+                Needs: ${Math.round(results.monthlyNeeds).toLocaleString()} · Wants: ${Math.round(results.monthlyWants).toLocaleString()}
+              </span>
+            </button>
+
+            {/* 3. Monthly Savings & Investments */}
+            <button
+              type="button"
+              onClick={() => setActiveLayer(2)}
+              className="p-4 bg-white hover:bg-stone-50 border border-stone-200/90 rounded-2xl text-left transition-all group cursor-pointer shadow-2xs"
+            >
+              <span className="text-[11px] font-sans text-stone-500 group-hover:text-stone-900 block transition-colors">
+                3. Monthly Wealth Flow
+              </span>
+              <span className="text-xl sm:text-2xl font-bold text-amber-950 block mt-1">
+                ${Math.round(results.totalMonthlyContribution).toLocaleString()}
+              </span>
+              <span className="text-[10px] font-sans text-stone-400 block mt-0.5 truncate">
+                Savings & AAG Policies
+              </span>
+            </button>
+
+            {/* 4. Spare Cash (Prominently Highlighted!) */}
+            <div className={`p-4 rounded-2xl border text-left shadow-2xs transition-all ${
+              results.spareCashMonthly > 0
+                ? 'bg-emerald-50/80 border-emerald-300 text-emerald-950'
+                : results.spareCashMonthly === 0
+                ? 'bg-amber-50/70 border-amber-300 text-stone-950'
+                : 'bg-rose-50/80 border-rose-300 text-rose-950'
+            }`}>
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-sans font-bold">
+                  4. Spare Cash Left
                 </span>
-              </button>
+                <span className={`text-[9px] uppercase px-1.5 py-0.5 rounded-full font-bold ${
+                  results.spareCashMonthly > 0
+                    ? 'bg-emerald-200 text-emerald-950'
+                    : results.spareCashMonthly === 0
+                    ? 'bg-amber-200 text-amber-950'
+                    : 'bg-rose-200 text-rose-950'
+                }`}>
+                  {results.spareCashMonthly > 0 ? 'Surplus' : results.spareCashMonthly === 0 ? 'Exact' : 'Deficit'}
+                </span>
+              </div>
+              <span className="text-xl sm:text-2xl font-bold block mt-1">
+                {results.spareCashMonthly >= 0 ? '+' : '-'}${Math.round(Math.abs(results.spareCashMonthly)).toLocaleString()}
+              </span>
+              <span className="text-[10px] font-sans opacity-85 block mt-0.5 truncate font-medium">
+                {results.spareCashMonthly >= 0 ? 'Inflow - Living - Investments' : 'Spending exceeds available'}
+              </span>
+            </div>
+
+            {/* 5. Savings Rate */}
+            <div className="p-4 bg-white border border-stone-200/90 rounded-2xl text-left shadow-2xs col-span-2 sm:col-span-1">
+              <span className="text-[11px] font-sans text-stone-500 block">
+                5. Actual Savings Rate
+              </span>
+              <span className="text-xl sm:text-2xl font-bold text-stone-950 block mt-1">
+                {(results.savingsRate * 100).toFixed(1)}%
+              </span>
+              <span className="text-[10px] font-sans text-amber-900 font-semibold block mt-0.5 truncate">
+                Target: {((plan.targetSavingsRate ?? 0.20) * 100).toFixed(0)}%
+              </span>
             </div>
           </div>
         </header>
 
-        {/* Visual Kueh Lapis Cake Cross-Section */}
-        <KuehLapisVisual
-          activeLayer={activeLayer}
-          unlockedLevel={unlockedLevel}
-          results={results}
-          onSelectLayer={(id) => setActiveLayer(id)}
-          lockedLayersVisible={lockedLayersVisible}
-        />
-
-        {/* Active Layer View */}
+        {/* Active Layer View (Steps 01 to 05, with The Cake Session at the End!) */}
         <div className="transition-all duration-300">
           {activeLayer === 1 && (
             <Layer1CashFlow
@@ -273,12 +546,119 @@ export default function App() {
           )}
 
           {activeLayer === 5 && (
-            <Layer5RetirementGap
-              plan={plan}
-              results={results}
-              onUpdatePlan={handleUpdatePlan}
-              onOpenReport={() => setIsReportOpen(true)}
-            />
+            <div className="space-y-8">
+              <Layer5RetirementGap
+                plan={plan}
+                results={results}
+                onUpdatePlan={handleUpdatePlan}
+                onOpenReport={() => setIsReportOpen(true)}
+              />
+
+              {/* End of Process Transition to Cake Cross-Section */}
+              <div className="p-6 bg-gradient-to-r from-amber-100/70 to-rose-100/50 rounded-3xl border border-amber-300/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <span className="text-xs font-semibold text-amber-900 uppercase tracking-wider block">
+                    Final Culmination Milestone
+                  </span>
+                  <h3 className="text-lg font-bold text-stone-950 font-display">
+                    Interactive Kueh Lapis Cake Cross-Section
+                  </h3>
+                  <p className="text-xs text-stone-600 font-light mt-0.5">
+                    Synthesize all layers of your personal financial cake into one unified visual masterpiece.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setActiveLayer(6)}
+                  className="flex items-center gap-2 px-5 py-2.5 text-xs font-bold text-stone-950 bg-white hover:bg-amber-50 border border-stone-300 rounded-xl shadow-xs transition-all cursor-pointer shrink-0"
+                >
+                  <Cake className="w-4 h-4 text-amber-800" />
+                  <span>Reveal Full Cake Cross-Section</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Layer 6: The Interactive Cake Session (Positioned at the End of the Process) */}
+          {activeLayer === 6 && (
+            <div className="space-y-8">
+              <section className="bg-white rounded-3xl p-6 sm:p-8 border border-stone-200/80 shadow-xs">
+                <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-3 mb-2">
+                  <div className="text-xs text-stone-500 font-medium">
+                    Chapter 06 <span className="text-stone-300">/</span> Grand Synthesis <span className="text-stone-300">·</span> Final Cake Reveal
+                  </div>
+                  <span className="text-xs font-semibold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200 flex items-center gap-1.5">
+                    <Sparkles className="w-3.5 h-3.5 text-emerald-700" />
+                    <span>All Strata Unlocked & Synthesized</span>
+                  </span>
+                </div>
+
+                <h2 className="text-3xl sm:text-4xl font-normal text-stone-950 font-display tracking-tight leading-tight">
+                  The Complete Kueh Lapis Cake Cross-Section
+                </h2>
+                <p className="text-sm text-stone-600 mt-2 max-w-2xl font-light leading-relaxed">
+                  Here is the full architecture of your financial life stacked layer by layer. Explore each stratum, inspect compounding metrics, and review your blueprint.
+                </p>
+
+                {/* Culmination Executive Scorecard */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 mt-6 border-t border-stone-100 font-mono-num text-xs">
+                  <div className="p-3.5 bg-stone-50 rounded-2xl border border-stone-200/80">
+                    <span className="text-[10px] font-sans text-stone-500 uppercase block font-semibold">Wealth Runway</span>
+                    <span className="text-lg font-bold text-amber-950 block mt-0.5">{results.wealthRunwayYears} Years Left</span>
+                    <span className="text-[10px] font-sans text-stone-400">Age {plan.profile.age || 44} → {plan.profile.retirementAge || 60}</span>
+                  </div>
+
+                  <div className="p-3.5 bg-stone-50 rounded-2xl border border-stone-200/80">
+                    <span className="text-[10px] font-sans text-stone-500 uppercase block font-semibold">Total Stored Assets</span>
+                    <span className="text-lg font-bold text-stone-950 block mt-0.5">${Math.round(results.totalSavings).toLocaleString()}</span>
+                    <span className="text-[10px] font-sans text-stone-400">Cash + Policies + Equities</span>
+                  </div>
+
+                  <div className="p-3.5 bg-emerald-50/70 rounded-2xl border border-emerald-200/80">
+                    <span className="text-[10px] font-sans text-emerald-800 uppercase block font-semibold">Spare Cash Remaining</span>
+                    <span className="text-lg font-bold text-emerald-950 block mt-0.5">
+                      {results.spareCashMonthly >= 0 ? '+' : '-'}${Math.round(Math.abs(results.spareCashMonthly)).toLocaleString()}/mo
+                    </span>
+                    <span className="text-[10px] font-sans text-emerald-700/80">Uncommitted surplus</span>
+                  </div>
+
+                  <div className="p-3.5 bg-stone-50 rounded-2xl border border-stone-200/80">
+                    <span className="text-[10px] font-sans text-stone-500 uppercase block font-semibold">Retirement Target</span>
+                    <span className="text-lg font-bold text-stone-950 block mt-0.5">{(results.fundedPercentage * 100).toFixed(0)}% Funded</span>
+                    <span className="text-[10px] font-sans text-amber-900 font-medium">{results.fundedBand.status}</span>
+                  </div>
+                </div>
+              </section>
+
+              {/* The Interactive Cake Session Visual */}
+              <KuehLapisVisual
+                activeLayer={activeLayer}
+                unlockedLevel={unlockedLevel}
+                results={results}
+                onSelectLayer={(id) => setActiveLayer(id)}
+                lockedLayersVisible={lockedLayersVisible}
+              />
+
+              <div className="flex justify-between pt-2">
+                <button
+                  type="button"
+                  onClick={() => setActiveLayer(5)}
+                  className="px-4 py-2 text-xs font-medium text-stone-600 hover:text-stone-900 transition-colors cursor-pointer"
+                >
+                  ← Back to Chapter 05: Freedom Gap
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setIsReportOpen(true)}
+                  className="flex items-center gap-2 px-6 py-3 text-sm font-semibold text-stone-950 bg-amber-200/90 hover:bg-amber-300 border border-amber-300/80 rounded-2xl shadow-xs transition-all cursor-pointer"
+                >
+                  <span>Generate Full Advisor Dossier</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
           )}
         </div>
 
@@ -373,6 +753,19 @@ export default function App() {
           >
             <Sparkles className="w-4 h-4" />
             <span>05. Gap</span>
+          </button>
+        )}
+
+        {unlockedLevel >= 4 && (
+          <button
+            type="button"
+            onClick={() => setActiveLayer(6)}
+            className={`flex flex-col items-center gap-1 py-1 px-2 rounded-lg transition-colors ${
+              activeLayer === 6 ? 'text-amber-800 font-semibold' : 'text-stone-500 hover:text-stone-900'
+            }`}
+          >
+            <Cake className="w-4 h-4" />
+            <span>06. Cake</span>
           </button>
         )}
       </div>

@@ -114,17 +114,18 @@ export const PrintReport: React.FC<Props> = ({
               <span>Layer 1: Cash Flow Foundation</span>
             </h2>
 
-            <div className="grid grid-cols-3 gap-4 mb-4 font-mono-num">
-              <div className="p-3.5 bg-stone-50 rounded-xl border border-stone-200/80">
+            <div className="grid grid-cols-4 gap-3 mb-4 font-mono-num">
+              <div className="p-3 bg-stone-50 rounded-xl border border-stone-200/80">
                 <span className="text-[11px] font-sans font-medium text-stone-500 block">Monthly Inflow</span>
-                <span className="text-xl font-bold text-stone-900">
+                <span className="text-lg font-bold text-stone-900">
                   ${Math.round(results.monthlyIncome).toLocaleString()}
                 </span>
+                <span className="text-[10px] text-stone-400 block mt-0.5">Take-home & investments</span>
               </div>
 
-              <div className="p-3.5 bg-stone-50 rounded-xl border border-stone-200/80">
+              <div className="p-3 bg-stone-50 rounded-xl border border-stone-200/80">
                 <span className="text-[11px] font-sans font-medium text-stone-500 block">Monthly Outflow</span>
-                <span className="text-xl font-bold text-stone-900">
+                <span className="text-lg font-bold text-stone-900">
                   ${Math.round(results.monthlyExpenses).toLocaleString()}
                 </span>
                 <span className="text-[10px] text-stone-500 block mt-0.5">
@@ -132,10 +133,10 @@ export const PrintReport: React.FC<Props> = ({
                 </span>
               </div>
 
-              <div className="p-3.5 bg-stone-50 rounded-xl border border-stone-200/80">
-                <span className="text-[11px] font-sans font-medium text-stone-500 block">Net Monthly Surplus</span>
+              <div className="p-3 bg-stone-50 rounded-xl border border-stone-200/80">
+                <span className="text-[11px] font-sans font-medium text-stone-500 block">Net Surplus</span>
                 <span
-                  className={`text-xl font-bold ${
+                  className={`text-lg font-bold ${
                     results.monthlyCashFlow >= 0 ? 'text-emerald-700' : 'text-rose-700'
                   }`}
                 >
@@ -143,6 +144,16 @@ export const PrintReport: React.FC<Props> = ({
                 </span>
                 <span className="text-[10px] text-stone-500 block mt-0.5">
                   Savings Rate: {(results.savingsRate * 100).toFixed(1)}%
+                </span>
+              </div>
+
+              <div className="p-3 bg-emerald-50/70 rounded-xl border border-emerald-300">
+                <span className="text-[11px] font-sans font-bold text-emerald-950 block">Spare Cash Left</span>
+                <span className="text-lg font-bold text-emerald-950">
+                  {results.spareCashMonthly >= 0 ? '+' : '-'}${Math.round(Math.abs(results.spareCashMonthly)).toLocaleString()}
+                </span>
+                <span className="text-[10px] text-emerald-800 block mt-0.5 font-sans">
+                  After living & wealth flows
                 </span>
               </div>
             </div>
@@ -157,10 +168,10 @@ export const PrintReport: React.FC<Props> = ({
               <span>Layer 2: Emergency Runway & Stored Savings</span>
             </h2>
 
-            <div className="grid grid-cols-3 gap-4 mb-3 font-mono-num">
-              <div className="p-3.5 bg-stone-50 rounded-xl border border-stone-200/80">
+            <div className="grid grid-cols-4 gap-3 mb-4 font-mono-num">
+              <div className="p-3 bg-stone-50 rounded-xl border border-stone-200/80">
                 <span className="text-[11px] font-sans font-medium text-stone-500 block">Pure Cash Runway</span>
-                <span className="text-xl font-bold text-stone-900">
+                <span className="text-lg font-bold text-stone-900">
                   {results.cashRunwayMonths.toFixed(1)} <span className="text-xs font-normal">months</span>
                 </span>
                 <span className="text-[10px] font-sans text-amber-800 block mt-0.5 font-medium">
@@ -168,20 +179,126 @@ export const PrintReport: React.FC<Props> = ({
                 </span>
               </div>
 
-              <div className="p-3.5 bg-stone-50 rounded-xl border border-stone-200/80">
-                <span className="text-[11px] font-sans font-medium text-stone-500 block">Total Liquid Savings</span>
-                <span className="text-xl font-bold text-stone-900">
+              <div className="p-3 bg-stone-50 rounded-xl border border-stone-200/80">
+                <span className="text-[11px] font-sans font-medium text-stone-500 block">Total Stored Assets</span>
+                <span className="text-lg font-bold text-stone-900">
                   ${Math.round(results.totalSavings).toLocaleString()}
                 </span>
               </div>
 
-              <div className="p-3.5 bg-stone-50 rounded-xl border border-stone-200/80">
-                <span className="text-[11px] font-sans font-medium text-stone-500 block">Total Portfolio Runway</span>
-                <span className="text-xl font-bold text-stone-900">
+              <div className="p-3 bg-amber-50/50 rounded-xl border border-amber-200/70">
+                <span className="text-[11px] font-sans font-semibold text-amber-950 block">Monthly Wealth Flow</span>
+                <span className="text-lg font-bold text-amber-950">
+                  ${Math.round(results.totalMonthlyContribution).toLocaleString()}
+                  <span className="text-xs font-normal text-stone-500">/mo</span>
+                </span>
+                <span className="text-[10px] font-sans text-amber-800 block mt-0.5">
+                  ${Math.round(results.totalMonthlyContribution * 12).toLocaleString()}/yr
+                </span>
+              </div>
+
+              <div className="p-3 bg-stone-50 rounded-xl border border-stone-200/80">
+                <span className="text-[11px] font-sans font-medium text-stone-500 block">Portfolio Runway</span>
+                <span className="text-lg font-bold text-stone-900">
                   {results.totalRunwayMonths.toFixed(1)} <span className="text-xs font-normal">months</span>
                 </span>
               </div>
             </div>
+
+            {/* Savings & Investment Buckets Ledger Table */}
+            <div className="border border-stone-200 rounded-xl overflow-hidden mb-3">
+              <table className="w-full text-xs text-left">
+                <thead className="bg-stone-100/70 text-stone-600 font-semibold border-b border-stone-200">
+                  <tr>
+                    <th className="py-2 px-3">Asset Bucket</th>
+                    <th className="py-2 px-3 text-right">Current Valuation</th>
+                    <th className="py-2 px-3 text-right">Portfolio Share</th>
+                    <th className="py-2 px-3 text-right text-amber-950 font-bold bg-amber-50">
+                      Monthly Contribution
+                    </th>
+                    <th className="py-2 px-3 text-right">Annual Flow</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-stone-100 font-mono-num">
+                  {results.bucketShares.map((b) => (
+                    <tr key={b.key}>
+                      <td className="py-2 px-3 font-sans text-stone-800">{b.label}</td>
+                      <td className="py-2 px-3 text-right text-stone-900">${b.amount.toLocaleString()}</td>
+                      <td className="py-2 px-3 text-right text-stone-600">{b.percentage.toFixed(1)}%</td>
+                      <td className="py-2 px-3 text-right font-semibold text-amber-950 bg-amber-50/40">
+                        {b.monthlyContribution > 0 ? `$${b.monthlyContribution.toLocaleString()}/mo` : '—'}
+                      </td>
+                      <td className="py-2 px-3 text-right text-stone-700">
+                        {b.monthlyContribution > 0 ? `$${(b.monthlyContribution * 12).toLocaleString()}/yr` : '—'}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+                <tfoot>
+                  <tr className="border-t border-stone-300 font-mono-num font-bold bg-stone-50 text-stone-950">
+                    <td className="py-2 px-3 font-sans">Total Assets & Flows</td>
+                    <td className="py-2 px-3 text-right">${Math.round(results.totalSavings).toLocaleString()}</td>
+                    <td className="py-2 px-3 text-right font-sans text-stone-500 font-normal">100%</td>
+                    <td className="py-2 px-3 text-right text-amber-950 bg-amber-100/50">
+                      ${Math.round(results.totalMonthlyContribution).toLocaleString()}/mo
+                    </td>
+                    <td className="py-2 px-3 text-right">
+                      ${Math.round(results.totalMonthlyContribution * 12).toLocaleString()}/yr
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+
+            {/* AAG Investment Policies Breakdown (if present) */}
+            {plan.investmentPolicies && plan.investmentPolicies.length > 0 && (
+              <div className="border border-amber-300 rounded-xl overflow-hidden mb-3 bg-amber-50/20">
+                <div className="bg-amber-100/70 px-3 py-2 border-b border-amber-300 flex items-center justify-between text-xs">
+                  <span className="font-bold text-amber-950 font-display">AAG Investment Policies & Accumulation to Age {plan.profile.retirementAge || 60}</span>
+                  <span className="text-[10px] text-amber-900 font-mono-num">{results.wealthRunwayYears} Years Wealth Runway</span>
+                </div>
+                <table className="w-full text-xs text-left">
+                  <thead className="bg-white/80 text-stone-600 font-semibold border-b border-amber-200">
+                    <tr>
+                      <th className="py-2 px-3">Policy / Plan</th>
+                      <th className="py-2 px-3">Type</th>
+                      <th className="py-2 px-3 text-right">Amount Invested</th>
+                      <th className="py-2 px-3 text-right">Monthly Flow</th>
+                      <th className="py-2 px-3 text-right">Return Rate</th>
+                      <th className="py-2 px-3 text-right font-bold text-emerald-950 bg-emerald-50">Value at {plan.profile.retirementAge || 60}</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-amber-100 font-mono-num">
+                    {plan.investmentPolicies.map((pol) => {
+                      const res = results.investmentPoliciesResults?.find((r) => r.policy.id === pol.id);
+                      return (
+                        <tr key={pol.id}>
+                          <td className="py-2 px-3 font-sans font-medium text-stone-900">{pol.name}</td>
+                          <td className="py-2 px-3 font-sans text-stone-600 uppercase text-[10px]">{pol.policyType}</td>
+                          <td className="py-2 px-3 text-right text-stone-900">${pol.currentValuation.toLocaleString()}</td>
+                          <td className="py-2 px-3 text-right font-semibold text-amber-950">${pol.monthlyContribution.toLocaleString()}/mo</td>
+                          <td className="py-2 px-3 text-right text-stone-600">{(pol.expectedReturnRate * 100).toFixed(1)}%</td>
+                          <td className="py-2 px-3 text-right font-bold text-emerald-950 bg-emerald-50/40">
+                            ${res ? Math.round(res.projectedValueAtRetirement).toLocaleString() : '0'}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                  <tfoot>
+                    <tr className="border-t border-amber-300 font-mono-num font-bold bg-amber-100/50 text-stone-950">
+                      <td colSpan={2} className="py-2 px-3 font-sans">Total Investment Policies</td>
+                      <td className="py-2 px-3 text-right">${Math.round(results.totalInvestmentsValuation).toLocaleString()}</td>
+                      <td className="py-2 px-3 text-right text-amber-950">${Math.round(results.totalInvestmentsMonthlyContribution).toLocaleString()}/mo</td>
+                      <td className="py-2 px-3 text-right font-sans text-[10px] font-normal text-stone-500">Compounded</td>
+                      <td className="py-2 px-3 text-right text-emerald-950 bg-emerald-100/60 font-bold">
+                        ${Math.round(results.totalInvestmentsProjectedAtRetirement).toLocaleString()}
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            )}
           </div>
 
           {/* Section 3: CPF Foundation (Layer 3) */}
